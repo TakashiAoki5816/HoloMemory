@@ -125,6 +125,8 @@ return [
 
     'API_KEY' => env('API_KEY', false),
 
+    'SUB_API_KEY' => env('SUB_API_KEY', false),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
