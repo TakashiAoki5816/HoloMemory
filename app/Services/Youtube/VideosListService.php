@@ -12,6 +12,13 @@ class VideosListService
         $this->clientInterface = $clientInterface;
     }
 
+    public function checkDiffDate($videoId)
+    {
+        $scheduleStartTime = $this->getScheduledStartTime($videoId);
+
+        return $this->getStartTimeDiffToday($scheduleStartTime);
+    }
+
     public function getScheduledStartTime($videoId)
     {
         $method = "GET";
@@ -31,7 +38,7 @@ class VideosListService
         $date = $video["items"][0]["liveStreamingDetails"]["scheduledStartTime"];
         $scheduleStartTime = new DateTime($date);
 
-        return $scheduleStartTime->format('Y-m-d');
+        return $scheduleStartTime;
     }
 
     public function setUrl($videoId)
@@ -42,5 +49,12 @@ class VideosListService
     public function subSetUrl($videoId)
     {
         return "https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=" . $videoId . "&key=" . config('app.SUB_API_KEY');
+    }
+
+    public function getStartTimeDiffToday($scheduleStartTime)
+    {
+        $now = new DateTime('now');
+        $interval = $now->diff($scheduleStartTime);
+        return $interval->format('%a');
     }
 }

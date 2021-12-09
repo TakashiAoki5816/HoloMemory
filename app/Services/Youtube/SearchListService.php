@@ -33,28 +33,38 @@ class SearchListService
 
         $members = $this->member->getAllMembers();
         foreach ($members as $member) {
-            $channel_id = $member->channel_id;
-            $url = "https://www.googleapis.com/youtube/v3/search?key=" . config('app.API_KEY') . "&channel_id=" . $channel_id . "&part=snippet&eventType=upcoming&type=video";
+            $channelId = $member->channel_id;
+            $url = $this->setUrl($channelId);
 
             $response = $this->clientInterface->firstRequest($method, $url);
 
             if ($response instanceof RequestException) {
                 //メインのAPIキーが使えなかった場合、別プロジェクトのAPIキーを使用
-                $url = $this->subSetUrl($channel_id);
+                $url = $this->subSetUrl($channelId);
                 $response = $this->clientInterface->secondRequest($method, $url);
             }
 
             $body = $response->getBody();
             $video = json_decode($body, true);
 
-            $this->storageVideoInfo($video);
-            $videos = $this->storageVideos($videos, $video);
-            if ($member->id == 2) {
-                dd($videos);
+
+            if (!empty($video["items"])) {
+                $videoId = $video["items"][0]["id"]["videoId"];
+                $interval = $this->videosListService->checkDiffDate($videoId);
+
+                if ($interval <= "10") {
+                    $this->storageVideoInfo($video);
+                    $videos = $this->storageVideos($videos, $video);
+                }
             }
         }
         dd($videos);
         $this->storeDailyUpcomingVideos($videos);
+    }
+
+    public function setUrl($channelId)
+    {
+        return "https://www.googleapis.com/youtube/v3/search?key=" . config('app.API_KEY') . "&channel_id=" . $channelId . "&part=snippet&eventType=upcoming&type=video";
     }
 
     /**
@@ -63,24 +73,23 @@ class SearchListService
      * @param string $channel_id
      * @return string
      */
-    public function subSetUrl($channel_id)
+    public function subSetUrl($channelId)
     {
-        return "https://www.googleapis.com/youtube/v3/search?key=" . config('app.SUB_API_KEY') . "&channel_id=" . $channel_id . "&part=snippet&eventType=upcoming&type=video";
+        return "https://www.googleapis.com/youtube/v3/search?key=" . config('app.SUB_API_KEY') . "&channel_id=" . $channelId . "&part=snippet&eventType=upcoming&type=video";
     }
 
     public function storageVideoInfo($video)
     {
         $videoInfo = array();
-
         $videoId = $video["items"][0]["id"]["videoId"];
         $channelId = $video["items"][0]["snippet"]["channelId"];
         $title = $video["items"][0]["snippet"]["title"];
         $thumbnails = $video["items"][0]["snippet"]["thumbnails"]["medium"]["url"];
-        $this->videosListService->getScheduledStartTime($channelId);
 
+        $date = $this->videosListService->getScheduledStartTime($videoId);
+        $scheduleStartTime = $date->format('Y-m-d');
 
-        $bb = array_push($videoInfo, $video["regionCode"]);
-        // dd($video["regionCode"]);
+        array_push($videoInfo, $video["regionCode"], $videoId, $channelId, $title, $thumbnails, $scheduleStartTime);
     }
 
     /**
