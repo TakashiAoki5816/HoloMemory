@@ -15,6 +15,7 @@ class CreateDailyUpcomingVideos extends Migration
     {
         Schema::create('daily_upcoming_videos', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('country', '2');
             $table->integer('video_id');
             $table->string('channel_id', 255)->unique()->comment('チャンネルID、各チャンネルページのchannel/以降の文字列');
             $table->string('title', 255);
