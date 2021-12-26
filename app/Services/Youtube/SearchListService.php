@@ -3,10 +3,12 @@
 namespace App\Services\Youtube;
 
 use App\Models\Member;
-use App\Repositories\Guzzle\GuzzleRepositoryInterface;
+use App\Models\DailyUpcomingVideos;
 use App\Services\Youtube\VideosListService;
+use App\Repositories\Guzzle\GuzzleRepositoryInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\DB;
 
 class SearchListService
 {
@@ -73,7 +75,10 @@ class SearchListService
                 }
             }
         }
+
+        DB::beginTransaction();
         $this->storeDailyUpcomingVideos($videos);
+        DB::commit();
     }
 
     /**
@@ -172,8 +177,26 @@ class SearchListService
 
     public function storeDailyUpcomingVideos($videos)
     {
-        // DB::table('daily_upcoming_videos')->insert([
-        //     ['video_id' => $video['items']]
-        // ])
+        $params = [];
+        foreach ($videos as $video) {
+            $params[] = [
+                'country'              => $video['0'],
+                'video_id'             => $video['1'],
+                'channel_id'           => $video['2'],
+                'title'                => $video['3'],
+                'thumbnails_url'       => $video['4'],
+                'scheduled_start_time' => $video['5'],
+            ];
+            // DB::table('daily_upcoming_videos')->insert([
+            //     ['country'              => $video['0']],
+            //     ['video_id'             => $video['1']],
+            //     ['channel_id'           => $video['2']],
+            //     ['title'                => $video['3']],
+            //     ['thumbnails_url'       => $video['4']],
+            //     ['scheduled_start_time' => $video['5']],
+            // ]);
+        }
+
+        DailyUpcomingVideos::insert($params);
     }
 }
