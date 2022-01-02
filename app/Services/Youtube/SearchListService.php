@@ -3,11 +3,11 @@
 namespace App\Services\Youtube;
 
 use App\Models\Member;
-use App\Models\DailyUpcomingVideos;
-use App\Services\Youtube\VideosListService;
 use App\Repositories\Guzzle\GuzzleRepositoryInterface;
+use App\Services\Youtube\VideosListService;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class SearchListService
@@ -27,7 +27,7 @@ class SearchListService
     }
 
     /**
-     * Youtube Data API Search_Listを叩く
+     * Youtube Data API Search_Listを叩き、daily_upcoming_videosに格納
      *
      * @return void
      */
@@ -39,8 +39,8 @@ class SearchListService
         $members = $this->member->getAllMembers();
         foreach ($members as $member) {
             $channelId = $member->channel_id;
-            // $url = $this->setUrl($channelId);
-            $url = $this->subSetUrl($channelId);
+            $url = $this->setUrl($channelId);
+            // $url = $this->subSetUrl($channelId);
 
             $response = $this->clientInterface->firstRequest($method, $url);
 
@@ -76,8 +76,10 @@ class SearchListService
             }
         }
 
+        $params = $this->storeParamsFromVideos($videos);
         DB::beginTransaction();
-        $this->storeDailyUpcomingVideos($videos);
+        DB::table('daily_upcoming_videos')->truncate();
+        DB::table('daily_upcoming_videos')->insert($params);
         DB::commit();
     }
 
@@ -168,16 +170,23 @@ class SearchListService
      *
      * @param array $videos
      * @param array $videoInfoArr
-     * @return array
+     * @return array $videos
      */
     public function storageVideoInfoArrToVideos($videos, $videoInfoArr)
     {
         return array_merge($videos, $videoInfoArr);
     }
 
-    public function storeDailyUpcomingVideos($videos)
+    /**
+     * 取得したデータを$paramsに格納
+     *
+     * @param array $videos
+     * @return array $params
+     */
+    public function storeParamsFromVideos($videos)
     {
         $params = [];
+        $now = Carbon::now();
         foreach ($videos as $video) {
             $params[] = [
                 'country'              => $video['0'],
@@ -186,17 +195,11 @@ class SearchListService
                 'title'                => $video['3'],
                 'thumbnails_url'       => $video['4'],
                 'scheduled_start_time' => $video['5'],
+                'created_at'           => $now,
+                'updated_at'           => $now,
             ];
-            // DB::table('daily_upcoming_videos')->insert([
-            //     ['country'              => $video['0']],
-            //     ['video_id'             => $video['1']],
-            //     ['channel_id'           => $video['2']],
-            //     ['title'                => $video['3']],
-            //     ['thumbnails_url'       => $video['4']],
-            //     ['scheduled_start_time' => $video['5']],
-            // ]);
         }
 
-        DailyUpcomingVideos::insert($params);
+        return $params;
     }
 }

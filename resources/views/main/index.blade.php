@@ -32,11 +32,9 @@
                             <th>コメント数</th>
                             <th>作成日</th>
                         </tr>
-                            @foreach($posts as $index => $post)
-                                @if (!empty($post['items']))
-                                    {{ $post['items'][0]["snippet"]["thumbnails"]["high"]["url"] }}
-                                    <img src="{{ $post['items'][0]["snippet"]["thumbnails"]["high"]["url"] }}" width="{{ $post['items'][0]["snippet"]["thumbnails"]["high"]["width"] }}" height="{{ $post['items'][0]["snippet"]["thumbnails"]["high"]["url"] }}">
-                                @endif
+                            @foreach($videos as $key => $video)
+                                    {{ $video['title'] }}
+                                    <img src="{{ $video['thumbnails_url'] }}">
                             @endforeach
                         </tr>
                     </table>

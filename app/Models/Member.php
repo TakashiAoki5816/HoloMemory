@@ -8,7 +8,13 @@ class Member extends Model
 {
     protected $table = 'HOLOLIVE_MEMBER_MST';
 
-    public function getAllMembers() {
+    /**
+     * 所属している全メンバーを取得
+     *
+     * @return Member
+     */
+    public function getAllMembers()
+    {
         return Member::all();
     }
 }
