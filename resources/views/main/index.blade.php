@@ -17,31 +17,24 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
 <body>
-    <main class="py-4">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <table class="table table-striped table-dark mt-5">
-                        <tr>
-                            <th>タイトル</th>
-                            <th>いいね数</th>
-                            <th>コメント数</th>
-                            <th>作成日</th>
-                        </tr>
-                            @foreach($videos as $key => $video)
-                                    {{ $video['title'] }}
-                                    <img src="{{ $video['thumbnails_url'] }}">
-                            @endforeach
-                        </tr>
-                    </table>
-                </div>
+    <div class="container m-auto">
+        <header>
+        </header>
+        <main class="w-11/12 m-auto">
+            <div class="flex flex-wrap items-center justify-center">
+                @foreach($videos as $key => $video)
+                    <div class="m-6">
+                        {{-- <p>{{ $video['title'] }}</p> --}}
+                        <img src="{{ $video['thumbnails_url'] }}">
+                    </div>
+                @endforeach
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 </body>
 
 </html>
