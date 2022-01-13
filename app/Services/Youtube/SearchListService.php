@@ -2,6 +2,7 @@
 
 namespace App\Services\Youtube;
 
+use App\Consts\SearchListServiceConsts;
 use App\Models\Member;
 use App\Repositories\Guzzle\GuzzleRepositoryInterface;
 use App\Services\Youtube\VideosListService;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class SearchListService
 {
     protected $clientInterface;
+    protected $videosListService;
 
     /**
      * @param Member $member
@@ -33,17 +35,30 @@ class SearchListService
      */
     public function requestSearchList()
     {
+        $members = $this->member->getAllMembers();
+        $videos = $this->request($members);
+
+        $params = $this->storeParamsFromVideos($videos);
+        $this->insertDailyUpcomingVideos($params);
+    }
+
+    /**
+     * $videosに配信予定一覧を格納
+     *
+     * @param Member $members
+     * @return array $videos
+     */
+    public function request($members)
+    {
         $method = "GET";
         $videos = array();
 
-        $members = $this->member->getAllMembers();
         foreach ($members as $member) {
             $channelId = $member->channel_id;
             $url = $this->setUrl($channelId);
             // $url = $this->subSetUrl($channelId);
 
             $response = $this->clientInterface->firstRequest($method, $url);
-
             if ($response instanceof ClientException || $response instanceof RequestException) {
                 //メインのAPIキーが使えなかった場合、別プロジェクトのAPIキーを使用
                 $url = $this->subSetUrl($channelId);
@@ -55,20 +70,20 @@ class SearchListService
 
             if (!empty($video["items"])) {
                 //配信予定が一つだけの場合
-                if (count($video["items"]) == "1") {
+                if (count($video["items"]) == SearchListServiceConsts::ONE_VIDEO) {
                     $videoId = $video["items"][0]["id"]["videoId"];
                     $interval = $this->videosListService->checkDiffToday($videoId);
 
-                    if ($interval <= "7") {
+                    if ($interval <= SearchListServiceConsts::ONE_WEEK) {
                         $videoInfoArr = array();
-                        $videoInfo = $this->storageVideoInfo($video["items"][0], $video["regionCode"]);
+                        $videoInfo = $this->storageVideoInfo($video["items"][0], $member->country);
                         array_push($videoInfoArr, $videoInfo);
                         $videos = $this->storageVideoInfoArrToVideos($videos, $videoInfoArr);
                     }
                 }
 
                 // 配信予定が複数ある場合
-                if (count($video["items"]) > "1") {
+                if (count($video["items"]) > SearchListServiceConsts::ONE_VIDEO) {
                     $videoIds = $this->storageVideoIds($video["items"]);
                     $videoInfoArr = $this->storageVideoInfoArr($videoIds, $video);
                     $videos = $this->storageVideoInfoArrToVideos($videos, $videoInfoArr);
@@ -76,11 +91,7 @@ class SearchListService
             }
         }
 
-        $params = $this->storeParamsFromVideos($videos);
-        DB::beginTransaction();
-        DB::table('daily_upcoming_videos')->truncate();
-        DB::table('daily_upcoming_videos')->insert($params);
-        DB::commit();
+        return $videos;
     }
 
     /**
@@ -133,7 +144,7 @@ class SearchListService
         foreach ($videoIds as $key => $videoId) {
             $interval = $this->videosListService->checkDiffToday($videoId);
 
-            if ($interval <= "7") {
+            if ($interval <= SearchListServiceConsts::ONE_WEEK) {
                 $videoInfo = $this->storageVideoInfo($video["items"][$key], $video["regionCode"]);
                 array_push($videoInfoArr, $videoInfo);
             }
@@ -201,5 +212,21 @@ class SearchListService
         }
 
         return $params;
+    }
+
+    /**
+     * daily_upcoming_videosに配信予定動画を挿入
+     *
+     * @param array $params
+     * @return void
+     */
+    public function insertDailyUpcomingVideos($params)
+    {
+        DB::beginTransaction();
+
+        DB::table('daily_upcoming_videos')->truncate();
+        DB::table('daily_upcoming_videos')->insert($params);
+
+        DB::commit();
     }
 }
