@@ -9,9 +9,9 @@ class DailyUpcomingVideos extends Model
     protected $table = 'daily_upcoming_videos';
 
     /**
-     * 登録されている配信予定動画一覧を全て取得
+     * 登録されている配信予定動画を全て取得
      *
-     * @return void
+     * @return DailyUpcomingVideos
      */
     public function getVideos()
     {
