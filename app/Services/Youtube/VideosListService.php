@@ -4,6 +4,8 @@ namespace App\Services\Youtube;
 
 use App\Repositories\Guzzle\GuzzleRepositoryInterface;
 use DateTime;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 class VideosListService
 {
@@ -36,19 +38,16 @@ class VideosListService
      */
     public function getScheduledStartTime($videoId)
     {
-        $method = "GET";
         $url = $this->setUrl($videoId);
-        // $url = $this->subSetUrl($videoId);
 
-        $response = $this->clientInterface->firstRequest($url);
-
-        if ($response instanceof ClientException || $response instanceof RequestException) {
+        $clientResponse = $this->clientInterface->firstRequest($url);
+        if ($clientResponse instanceof ClientException || $clientResponse instanceof RequestException) {
             //メインのAPIキーが使えなかった場合、別プロジェクトのAPIキーを使用
             $url = $this->subSetUrl($videoId);
-            $response = $this->clientInterface->secondRequest($url);
+            $clientResponse = $this->clientInterface->secondRequest($url);
         }
 
-        $body = $response->getBody();
+        $body = $clientResponse->getBody();
         $video = json_decode($body, true);
 
         $date = $video["items"][0]["liveStreamingDetails"]["scheduledStartTime"];

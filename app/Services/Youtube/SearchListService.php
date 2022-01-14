@@ -49,14 +49,12 @@ class SearchListService
         $videos = array();
 
         foreach ($members as $member) {
-            $channelId = $member->channel_id;
-            $url = $this->setUrl($channelId);
-            // $url = $this->subSetUrl($channelId);
+            $url = $this->setUrl($member->channel_id);
 
             $clientResponse = $this->clientInterface->firstRequest($url);
             if ($clientResponse instanceof ClientException || $clientResponse instanceof RequestException) {
                 //メインのAPIキーが使えなかった場合、別プロジェクトのAPIキーを使用
-                $url = $this->subSetUrl($channelId);
+                $url = $this->subSetUrl($member->channel_id);
                 $clientResponse = $this->clientInterface->secondRequest($url);
             }
 
@@ -69,9 +67,11 @@ class SearchListService
                     $videoId = $video["items"][0]["id"]["videoId"];
                     $interval = $this->videosListService->checkDiffToday($videoId);
 
+                    //１週間以内の動画を取得
                     if ($interval <= SearchListServiceConsts::ONE_WEEK) {
                         $videoInfoArr = array();
                         $videoInfo = $this->storageVideoInfo($video["items"][0], $member->country);
+
                         array_push($videoInfoArr, $videoInfo);
                         $videos = $this->storageVideoInfoArrToVideos($videos, $videoInfoArr);
                     }
@@ -80,7 +80,8 @@ class SearchListService
                 // 配信予定が複数ある場合
                 if (count($video["items"]) > SearchListServiceConsts::ONE_VIDEO) {
                     $videoIds = $this->storageVideoIds($video["items"]);
-                    $videoInfoArr = $this->storageVideoInfoArr($videoIds, $video);
+                    $videoInfoArr = $this->storageVideoInfoArr($videoIds, $video, $member->country);
+
                     $videos = $this->storageVideoInfoArrToVideos($videos, $videoInfoArr);
                 }
             }
@@ -114,6 +115,7 @@ class SearchListService
     /**
      * 複数の動画IDを$videoIdsに格納
      *
+     * @param array $items
      * @return array $videoIds
      */
     public function storageVideoIds($items)
@@ -132,15 +134,17 @@ class SearchListService
      *
      * @param array $videoIds
      * @param array $video
+     * @param string $regionCOde
      */
-    public function storageVideoInfoArr($videoIds, $video)
+    public function storageVideoInfoArr($videoIds, $video, $regionCode)
     {
         $videoInfoArr = array();
         foreach ($videoIds as $key => $videoId) {
             $interval = $this->videosListService->checkDiffToday($videoId);
 
+            //１週間以内の動画を取得
             if ($interval <= SearchListServiceConsts::ONE_WEEK) {
-                $videoInfo = $this->storageVideoInfo($video["items"][$key], $video["regionCode"]);
+                $videoInfo = $this->storageVideoInfo($video["items"][$key], $regionCode);
                 array_push($videoInfoArr, $videoInfo);
             }
         }
