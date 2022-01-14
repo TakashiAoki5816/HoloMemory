@@ -40,12 +40,12 @@ class VideosListService
         $url = $this->setUrl($videoId);
         // $url = $this->subSetUrl($videoId);
 
-        $response = $this->clientInterface->firstRequest($method, $url);
+        $response = $this->clientInterface->firstRequest($url);
 
         if ($response instanceof ClientException || $response instanceof RequestException) {
             //メインのAPIキーが使えなかった場合、別プロジェクトのAPIキーを使用
             $url = $this->subSetUrl($videoId);
-            $response = $this->clientInterface->secondRequest($method, $url);
+            $response = $this->clientInterface->secondRequest($url);
         }
 
         $body = $response->getBody();

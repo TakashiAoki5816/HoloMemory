@@ -17,13 +17,11 @@ class SearchListService
     protected $videosListService;
 
     /**
-     * @param Member $member
      * @param GuzzleRepositoryInterface $clientInterface
      * @param VideosListService $videosListService
      */
-    public function __construct(Member $member, GuzzleRepositoryInterface $clientInterface, VideosListService $videosListService)
+    public function __construct(GuzzleRepositoryInterface $clientInterface, VideosListService $videosListService)
     {
-        $this->member = $member;
         $this->clientInterface = $clientInterface;
         $this->videosListService = $videosListService;
     }
@@ -33,11 +31,9 @@ class SearchListService
      *
      * @return void
      */
-    public function requestSearchList()
+    public function requestSearchList($members)
     {
-        $members = $this->member->getAllMembers();
         $videos = $this->request($members);
-
         $params = $this->storeParamsFromVideos($videos);
         $this->insertDailyUpcomingVideos($params);
     }
@@ -50,7 +46,6 @@ class SearchListService
      */
     public function request($members)
     {
-        $method = "GET";
         $videos = array();
 
         foreach ($members as $member) {
@@ -58,14 +53,14 @@ class SearchListService
             $url = $this->setUrl($channelId);
             // $url = $this->subSetUrl($channelId);
 
-            $response = $this->clientInterface->firstRequest($method, $url);
-            if ($response instanceof ClientException || $response instanceof RequestException) {
+            $clientResponse = $this->clientInterface->firstRequest($url);
+            if ($clientResponse instanceof ClientException || $clientResponse instanceof RequestException) {
                 //メインのAPIキーが使えなかった場合、別プロジェクトのAPIキーを使用
                 $url = $this->subSetUrl($channelId);
-                $response = $this->clientInterface->secondRequest($method, $url);
+                $clientResponse = $this->clientInterface->secondRequest($url);
             }
 
-            $body = $response->getBody();
+            $body = $clientResponse->getBody();
             $video = json_decode($body, true);
 
             if (!empty($video["items"])) {
