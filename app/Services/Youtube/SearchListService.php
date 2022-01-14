@@ -198,13 +198,14 @@ class SearchListService
         $params = [];
         $now = Carbon::now();
         foreach ($videos as $video) {
+            list($country, $videoId, $channelId, $title, $thumbnails, $scheduleStartTime) = $video;
             $params[] = [
-                'country'              => $video['0'],
-                'video_id'             => $video['1'],
-                'channel_id'           => $video['2'],
-                'title'                => $video['3'],
-                'thumbnails_url'       => $video['4'],
-                'scheduled_start_time' => $video['5'],
+                'country'              => $country,
+                'video_id'             => $videoId,
+                'channel_id'           => $channelId,
+                'title'                => $title,
+                'thumbnails_url'       => $thumbnails,
+                'scheduled_start_time' => $scheduleStartTime,
                 'created_at'           => $now,
                 'updated_at'           => $now,
             ];
