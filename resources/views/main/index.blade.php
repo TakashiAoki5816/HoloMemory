@@ -27,9 +27,21 @@
         <main class="w-11/12 m-auto">
             <div class="flex flex-wrap items-center justify-center">
                 @foreach($videos as $key => $video)
-                    <div class="m-6">
-                        {{-- <p>{{ $video['title'] }}</p> --}}
-                        <img src="{{ $video['thumbnails_url'] }}">
+                    <div class="m-7">
+                        <div>
+                            <div>
+                            </div>
+                            <div>
+                                <a href="https://www.youtube.com/watch?v={{ $video->video_id }}">
+                                    <img src="{{ $video['thumbnails_url'] }}">
+                                </a>
+                            </div>
+                            <div class="w-60 m-auto">
+                                <a href="https://www.youtube.com/channel/{{ $video->member->channel_id }}">
+                                    <img src="{{ $video->member->channel_icon_url }}" width='60px' height='60px'>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 @endforeach
             </div>
