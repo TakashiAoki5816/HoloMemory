@@ -25,22 +25,22 @@
         <header>
         </header>
         <main class="w-11/12 m-auto">
-            <div class="flex flex-wrap items-center justify-center">
+            <div class="flex flex-wrap items-center justify-start">
                 @foreach($videos as $key => $video)
-                    <div class="m-7">
-                        <div>
-                            <div>
-                            </div>
-                            <div>
-                                <a href="https://www.youtube.com/watch?v={{ $video->video_id }}">
-                                    <img src="{{ $video['thumbnails_url'] }}">
-                                </a>
-                            </div>
-                            <div class="w-60 m-auto">
-                                <a href="https://www.youtube.com/channel/{{ $video->member->channel_id }}">
-                                    <img src="{{ $video->member->channel_icon_url }}" width='60px' height='60px'>
-                                </a>
-                            </div>
+                    <div class="w-320 h-290 m-7 border-2 border-gray-200">
+                        <div class="flex items-center justify-between h-40bg-gray-200">
+                            <div>{{ $video->scheduled_start_time }}</div>
+                            <div>{{ $video->member->name }}</div>
+                        </div>
+                        <div class="h-180">
+                            <a href="https://www.youtube.com/watch?v={{$video->video_id }}">
+                                <img src="{{ $video['thumbnails_url'] }}">
+                            </a>
+                        </div>
+                        <div class="h-60">
+                            <a class="block w-60 m-auto" href="https://wwwyoutube.com/channel/{{ $video->member->channel_id}}">
+                                <img src="{{ $video->member->channel_icon_url}}" style="border-radius: 50%; border: 2px#eeac5e solid" width="60" height="60">
+                            </a>
                         </div>
                     </div>
                 @endforeach
