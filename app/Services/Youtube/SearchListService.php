@@ -167,8 +167,7 @@ class SearchListService
         $channelId = $video["snippet"]["channelId"];
         $title = $video["snippet"]["title"];
         $thumbnails = $video["snippet"]["thumbnails"]["medium"]["url"];
-        $date = $this->videosListService->getScheduledStartTime($videoId);
-        $scheduleStartTime = $date->format('Y-m-d');
+        $scheduleStartTime = $this->videosListService->getScheduledStartTime($videoId);
 
         array_push($videoInfo, $regionCode, $videoId, $channelId, $title, $thumbnails, $scheduleStartTime);
 
