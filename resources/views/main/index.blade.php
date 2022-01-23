@@ -25,10 +25,10 @@
         <header>
         </header>
         <main class="w-11/12 m-auto">
-            <div class="flex flex-wrap items-center justify-start">
+            <div class="lessons">
                 @foreach($videos as $key => $video)
-                    <div class="w-320 h-290 m-7 border-2 border-gray-200">
-                        <div class="flex items-center justify-between h-40bg-gray-200">
+                    <div class="lesson w-320 h-290">
+                        <div class="lesson-header h-40">
                             <div>{{ $video->scheduled_start_time }}</div>
                             <div>{{ $video->member->name }}</div>
                         </div>
@@ -38,7 +38,7 @@
                             </a>
                         </div>
                         <div class="h-60">
-                            <a class="block w-60 m-auto" href="https://wwwyoutube.com/channel/{{ $video->member->channel_id}}">
+                            <a class="lesson-channel-icon w-60" href="https://wwwyoutube.com/channel/{{ $video->member->channel_id}}">
                                 <img src="{{ $video->member->channel_icon_url}}" style="border-radius: 50%; border: 2px#eeac5e solid" width="60" height="60">
                             </a>
                         </div>

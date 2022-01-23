@@ -1,4 +1,19 @@
-// Tailwond CSS
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+// Tailwind CSS
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .lessons {
+        @apply flex flex-wrap items-center justify-start;
+    }
+    .lesson {
+        @apply m-7 border-2 border-gray-200;
+    }
+    .lesson-header {
+        @apply flex items-center justify-between bg-gray-200;
+    }
+    .lesson-channel-icon {
+        @apply block m-auto;
+    }
+}
