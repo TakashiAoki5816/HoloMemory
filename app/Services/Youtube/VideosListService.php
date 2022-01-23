@@ -2,8 +2,9 @@
 
 namespace App\Services\Youtube;
 
-use App\Repositories\Guzzle\GuzzleRepositoryInterface;
 use DateTime;
+use DateTimeZone;
+use App\Repositories\Guzzle\GuzzleRepositoryInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 
@@ -51,7 +52,8 @@ class VideosListService
         $video = json_decode($body, true);
 
         $date = $video["items"][0]["liveStreamingDetails"]["scheduledStartTime"];
-        $scheduleStartTime = new DateTime($date);
+        $dateTime = new DateTime($date);
+        $scheduleStartTime = $dateTime->setTimezone(new DateTimeZone('Asia/Tokyo'));
 
         return $scheduleStartTime;
     }
