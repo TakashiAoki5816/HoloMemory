@@ -21,6 +21,6 @@ class DailyUpcomingVideos extends Model
      */
     public function getVideos()
     {
-        return DailyUpcomingVideos::all();
+        return $this->with('member')->get();
     }
 }
