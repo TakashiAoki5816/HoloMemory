@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Member;
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 class DailyUpcomingVideos extends Model
@@ -22,5 +23,11 @@ class DailyUpcomingVideos extends Model
     public function getVideos()
     {
         return $this->with('member')->get();
+    }
+
+    public function getStartTimeAttribute()
+    {
+        $startTime = new DateTime($this->scheduled_start_time);
+        return $startTime->format("H:i");
     }
 }
