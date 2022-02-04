@@ -7,13 +7,16 @@
     .lessons {
         @apply flex flex-wrap items-center justify-start;
     }
+    .lessons::after {
+        @apply block w-[320px];
+    }
     .lesson {
-        @apply m-7 border-2 border-gray-200;
+        @apply w-[320px] h-[285px] m-7 border-2 border-gray-200;
     }
     .lesson-header {
-        @apply flex items-center justify-between bg-gray-200;
+        @apply h-[40px] flex items-center justify-between;
     }
     .lesson-channel-icon {
-        @apply block m-auto;
+        @apply w-[60px] block m-auto;
     }
 }

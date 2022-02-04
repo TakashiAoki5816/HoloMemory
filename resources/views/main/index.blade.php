@@ -22,18 +22,18 @@
         <main class="w-11/12 m-auto">
             <div class="lessons">
                 @foreach($videos as $key => $video)
-                <div class="lesson w-320 h-290">
-                    <div class="lesson-header h-40">
+                <div class="lesson">
+                    <div class="lesson-header">
                         <div>{{ $video->start_time }}</div>
                         <div>{{ $video->member->name }}</div>
                     </div>
-                    <div class="h-180">
+                    <div class="h-[180px]">
                         <a href="https://www.youtube.com/watch?v={{$video->video_id }}">
                             <img src="{{ $video['thumbnails_url'] }}">
                         </a>
                     </div>
-                    <div class="h-60">
-                        <a class="lesson-channel-icon w-60"
+                    <div>
+                        <a class="lesson-channel-icon"
                             href="https://www.youtube.com/channel/{{ $video->member->channel_id}}">
                             <img src="{{ $video->member->channel_icon_url }}"
                                 style="border-radius: 50%; border: 2px#eeac5e solid" width="60" height="60">
