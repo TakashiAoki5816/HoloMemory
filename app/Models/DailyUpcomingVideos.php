@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Member;
+use App\Consts\DailyUpcomingVideosConsts;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +11,11 @@ class DailyUpcomingVideos extends Model
 {
     protected $table = 'daily_upcoming_videos';
 
+    /**
+     * memberのリレーション取得
+     *
+     * @return void
+     */
     public function member()
     {
         return $this->belongsTo(Member::class, 'channel_id', 'channel_id');
@@ -22,12 +28,31 @@ class DailyUpcomingVideos extends Model
      */
     public function getVideos()
     {
-        return $this->with('member')->get();
+        return $this->with('member')->orderBy('scheduled_start_time', 'asc')->get();
     }
 
+    /**
+     * 日付を取得
+     *
+     * @return string
+     */
+    public function getStartDateAttribute()
+    {
+        $dateTime = new DateTime($this->scheduled_start_time);
+        $day = $dateTime->format("m/d") . DailyUpcomingVideosConsts::WEEK[$dateTime->format("w")];
+
+        return $day;
+    }
+
+    /**
+     * 　開始時間を取得
+     *
+     * @return string
+     */
     public function getStartTimeAttribute()
     {
-        $startTime = new DateTime($this->scheduled_start_time);
-        return $startTime->format("H:i");
+        $dateTime = new DateTime($this->scheduled_start_time);
+
+        return $dateTime->format("H:i");
     }
 }

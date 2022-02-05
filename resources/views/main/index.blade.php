@@ -16,33 +16,44 @@
 </head>
 
 <body>
-    <div class="container m-auto">
-        <header>
+    <div class="w-full">
+        <header class="header">
+            <h1>HoloMemory</h1>
         </header>
-        <main class="w-11/12 m-auto">
-            <div class="lessons">
-                @foreach($videos as $key => $video)
-                <div class="lesson">
-                    <div class="lesson-header">
-                        <div>{{ $video->start_time }}</div>
-                        <div>{{ $video->member->name }}</div>
+        <div class="container m-auto">
+
+            <main class="w-11/12 m-auto">
+                <div class="lessons">
+                    @foreach ($videos as $key => $video)
+                    {{-- 日付の境界線チェック --}}
+                    @if ($key === 0 || substr($videos[$key]["scheduled_start_time"], 5, 5) !=
+                    substr($videos[$key-1]["scheduled_start_time"], 5, 5))
+                    <div class="date-section">
+                        <h2 class="text-white text-center leading-[60px]">{{ $video->start_date }}</h2>
                     </div>
-                    <div class="h-[180px]">
-                        <a href="https://www.youtube.com/watch?v={{$video->video_id }}">
-                            <img src="{{ $video['thumbnails_url'] }}">
-                        </a>
+                    @endif
+                    <div class="lesson">
+                        <div class="lesson-header">
+                            <div>{{ $video->start_time }}</div>
+                            <div>{{ $video->member->name }}</div>
+                        </div>
+                        <div class="lesson-image">
+                            <a href="https://www.youtube.com/watch?v={{$video->video_id }}">
+                                <img src="{{ $video['thumbnails_url'] }}">
+                            </a>
+                        </div>
+                        <div>
+                            <a class="lesson-channel-icon"
+                                href="https://www.youtube.com/channel/{{ $video->member->channel_id}}">
+                                <img src="{{ $video->member->channel_icon_url }}"
+                                    style="border-radius: 50%; border: 2px#eeac5e solid" width="60" height="60">
+                            </a>
+                        </div>
                     </div>
-                    <div>
-                        <a class="lesson-channel-icon"
-                            href="https://www.youtube.com/channel/{{ $video->member->channel_id}}">
-                            <img src="{{ $video->member->channel_icon_url }}"
-                                style="border-radius: 50%; border: 2px#eeac5e solid" width="60" height="60">
-                        </a>
-                    </div>
+                    @endforeach
                 </div>
-                @endforeach
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 </body>
 

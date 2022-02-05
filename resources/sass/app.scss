@@ -4,6 +4,12 @@
 @tailwind utilities;
 
 @layer components {
+    .header {
+        @apply h-[80px] bg-gray-200;
+    }
+    .date-section {
+        @apply w-full h-[60px] mt-9 bg-slate-900;
+    }
     .lessons {
         @apply flex flex-wrap items-center justify-start;
     }
@@ -11,10 +17,13 @@
         @apply block w-[320px];
     }
     .lesson {
-        @apply w-[320px] h-[285px] m-7 border-2 border-gray-200;
+        @apply w-[320px] h-[285px] my-7 mr-8 border-2 border-gray-200;
     }
     .lesson-header {
         @apply h-[40px] flex items-center justify-between;
+    }
+    .lesson-image {
+        @apply h-[180px];
     }
     .lesson-channel-icon {
         @apply w-[60px] block m-auto;
