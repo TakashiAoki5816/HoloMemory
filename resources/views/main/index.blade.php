@@ -22,7 +22,7 @@
         </header>
         <div class="container m-auto">
 
-            <main class="w-11/12 m-auto">
+            <main>
                 <div class="lessons">
                     @foreach ($videos as $key => $video)
                     {{-- 日付の境界線チェック --}}
@@ -38,13 +38,15 @@
                             <div>{{ $video->member->name }}</div>
                         </div>
                         <div class="lesson-image">
-                            <a href="https://www.youtube.com/watch?v={{$video->video_id }}">
+                            <a href="https://www.youtube.com/watch?v={{$video->video_id }}" target="_blank"
+                                rel="noopener noreferrer">
                                 <img src="{{ $video['thumbnails_url'] }}">
                             </a>
                         </div>
                         <div>
                             <a class="lesson-channel-icon"
-                                href="https://www.youtube.com/channel/{{ $video->member->channel_id}}">
+                                href="https://www.youtube.com/channel/{{ $video->member->channel_id}}" target="_blank"
+                                rel="noopener noreferrer">
                                 <img src="{{ $video->member->channel_icon_url }}"
                                     style="border-radius: 50%; border: 2px#eeac5e solid" width="60" height="60">
                             </a>
