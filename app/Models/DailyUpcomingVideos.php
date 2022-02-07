@@ -16,7 +16,7 @@ class DailyUpcomingVideos extends Model
      *
      * @return void
      */
-    public function member()
+    public function member(): object
     {
         return $this->belongsTo(Member::class, 'channel_id', 'channel_id');
     }
@@ -26,7 +26,7 @@ class DailyUpcomingVideos extends Model
      *
      * @return DailyUpcomingVideos
      */
-    public function getVideos()
+    public function getVideos(): object
     {
         return $this->with('member')->orderBy('scheduled_start_time', 'asc')->get();
     }
@@ -36,7 +36,7 @@ class DailyUpcomingVideos extends Model
      *
      * @return string
      */
-    public function getStartDateAttribute()
+    public function getStartDateAttribute(): string
     {
         $dateTime = new DateTime($this->scheduled_start_time);
         $day = $dateTime->format("m/d") . DailyUpcomingVideosConsts::WEEK[$dateTime->format("w")];
@@ -49,7 +49,7 @@ class DailyUpcomingVideos extends Model
      *
      * @return string
      */
-    public function getStartTimeAttribute()
+    public function getStartTimeAttribute(): string
     {
         $dateTime = new DateTime($this->scheduled_start_time);
 

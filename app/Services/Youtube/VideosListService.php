@@ -24,7 +24,7 @@ class VideosListService
      * @param string $videoId
      * @return string
      */
-    public function checkDiffToday($videoId)
+    public function checkDiffToday($videoId): string
     {
         $scheduleStartTime = $this->getScheduledStartTime($videoId);
 
@@ -37,7 +37,7 @@ class VideosListService
      * @param string $videoId
      * @return DateTime $scheduleStartTime
      */
-    public function getScheduledStartTime($videoId)
+    public function getScheduledStartTime($videoId): object
     {
         $url = $this->setUrl($videoId);
 
@@ -64,7 +64,7 @@ class VideosListService
      * @param DateTime $scheduleStartTime
      * @return string
      */
-    public function getStartTimeDiffToday($scheduleStartTime)
+    public function getStartTimeDiffToday($scheduleStartTime): string
     {
         $now = new DateTime('now');
         $interval = $now->diff($scheduleStartTime);
@@ -78,7 +78,7 @@ class VideosListService
      * @param string $videoId
      * @return string
      */
-    public function setUrl($videoId)
+    public function setUrl($videoId): string
     {
         return "https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=" . $videoId . "&key=" . config('app.API_KEY');
     }
@@ -89,7 +89,7 @@ class VideosListService
      * @param string $videoId
      * @return string
      */
-    public function subSetUrl($videoId)
+    public function subSetUrl($videoId): string
     {
         return "https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=" . $videoId . "&key=" . config('app.SUB_API_KEY');
     }

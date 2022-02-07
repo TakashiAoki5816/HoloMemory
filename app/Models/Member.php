@@ -9,7 +9,7 @@ class Member extends Model
 {
     protected $table = 'HOLOLIVE_MEMBER_MST';
 
-    public function daily_upcoming_videos()
+    public function daily_upcoming_videos(): object
     {
         return $this->hasMany(DailyUpcomingVideos::class);
     }
@@ -19,7 +19,7 @@ class Member extends Model
      *
      * @return Member
      */
-    public function getAllMembers()
+    public function getAllMembers(): object
     {
         return $this::all();
     }
