@@ -5,7 +5,13 @@
 
 @layer components {
     .header {
-        @apply h-[80px] bg-gray-200;
+        @apply relative flex h-[80px] bg-slate-900;
+    }
+    .hamburger {
+        @apply absolute translate-y-0 top-[25%] ml-5 h-10 w-10 fill-current text-white;
+    }
+    .logo {
+        @apply text-white m-auto;
     }
     .date-section {
         @apply w-full h-[60px] mt-9 bg-slate-900;
