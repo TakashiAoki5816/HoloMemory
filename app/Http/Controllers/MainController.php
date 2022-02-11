@@ -41,4 +41,11 @@ class MainController extends Controller
 
         return view('main/index', ['videos' => $videos]);
     }
+
+    public function index()
+    {
+        $videos = $this->dailyUpcomingVideos->getVideos();
+
+        return view('main/index', ['videos' => $videos]);
+    }
 }
