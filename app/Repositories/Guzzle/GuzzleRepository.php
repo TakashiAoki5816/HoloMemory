@@ -3,10 +3,11 @@
 namespace App\Repositories\Guzzle;
 
 use App\Consts\GuzzleRepositoryConsts;
+use App\Exceptions\RedirectExceptions;
 use App\Repositories\Guzzle\GuzzleRepositoryInterface;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 class GuzzleRepository implements GuzzleRepositoryInterface
 {
@@ -31,10 +32,10 @@ class GuzzleRepository implements GuzzleRepositoryInterface
             return $this->client->request(GuzzleRepositoryConsts::GET_METHOD, $url);
         } catch (ClientException $e) {
             //もう一つのAPIキーも使用できない場合
-            return redirect('/')->with('status', $e->getMessage());
+            throw new RedirectExceptions(route('index'), $e->getMessage(), $e->getCode());
         } catch (RequestException $e) {
             //もう一つのAPIキーも使用できない場合
-            return redirect('/')->with('status', $e->getMessage());
+            throw new RedirectExceptions(route('index'), $e->getMessage(), $e->getCode());
         }
     }
 
