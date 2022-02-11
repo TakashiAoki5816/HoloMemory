@@ -31,7 +31,7 @@ class SearchListService
      *
      * @return void
      */
-    public function requestSearchList($members): void
+    public function requestSearchList(object $members): void
     {
         $videos = $this->request($members);
         $params = $this->storeParamsFromVideos($videos);
@@ -44,7 +44,7 @@ class SearchListService
      * @param Member $members
      * @return array $videos
      */
-    public function request($members): array
+    public function request(object $members): array
     {
         $videos = array();
 
@@ -96,7 +96,7 @@ class SearchListService
      * @param string $channelId
      * @return string
      */
-    public function setUrl($channelId): string
+    public function setUrl(string $channelId): string
     {
         return "https://www.googleapis.com/youtube/v3/search?key=" . config('app.API_KEY') . "&channel_id=" . $channelId . "&part=snippet&eventType=upcoming&type=video";
     }
@@ -107,7 +107,7 @@ class SearchListService
      * @param string $channelId
      * @return string
      */
-    public function subSetUrl($channelId): string
+    public function subSetUrl(string $channelId): string
     {
         return "https://www.googleapis.com/youtube/v3/search?key=" . config('app.SUB_API_KEY') . "&channel_id=" . $channelId . "&part=snippet&eventType=upcoming&type=video";
     }
@@ -118,7 +118,7 @@ class SearchListService
      * @param array $items
      * @return array $videoIds
      */
-    public function storageVideoIds($items): array
+    public function storageVideoIds(array $items): array
     {
         $videoIds = array();
         foreach ($items as $item) {
@@ -137,7 +137,7 @@ class SearchListService
      * @param string $regionCOde
      * @return array $videoInfoArr
      */
-    public function storageVideoInfoArr($videoIds, $video, $regionCode): array
+    public function storageVideoInfoArr(array $videoIds, array $video, string $regionCode): array
     {
         $videoInfoArr = array();
         foreach ($videoIds as $key => $videoId) {
@@ -160,7 +160,7 @@ class SearchListService
      * @param string $regionCode
      * @return array $videoInfo
      */
-    public function storageVideoInfo($video, $regionCode): array
+    public function storageVideoInfo(array $video, string $regionCode): array
     {
         $videoInfo = array();
 
@@ -182,7 +182,7 @@ class SearchListService
      * @param array $videoInfoArr
      * @return array $videos
      */
-    public function storageVideoInfoArrToVideos($videos, $videoInfoArr): array
+    public function storageVideoInfoArrToVideos(array $videos, array $videoInfoArr): array
     {
         return array_merge($videos, $videoInfoArr);
     }
@@ -193,7 +193,7 @@ class SearchListService
      * @param array $videos
      * @return array $params
      */
-    public function storeParamsFromVideos($videos): array
+    public function storeParamsFromVideos(array $videos): array
     {
         $params = [];
         $now = Carbon::now();
@@ -220,7 +220,7 @@ class SearchListService
      * @param array $params
      * @return void
      */
-    public function insertDailyUpcomingVideos($params): void
+    public function insertDailyUpcomingVideos(array $params): void
     {
         DB::beginTransaction();
 
