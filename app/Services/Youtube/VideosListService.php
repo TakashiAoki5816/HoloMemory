@@ -2,8 +2,9 @@
 
 namespace App\Services\Youtube;
 
-use App\Repositories\Guzzle\GuzzleRepositoryInterface;
 use DateTime;
+use DateTimeZone;
+use App\Repositories\Guzzle\GuzzleRepositoryInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 
@@ -23,7 +24,7 @@ class VideosListService
      * @param string $videoId
      * @return string
      */
-    public function checkDiffToday($videoId)
+    public function checkDiffToday(string $videoId): string
     {
         $scheduleStartTime = $this->getScheduledStartTime($videoId);
 
@@ -36,7 +37,7 @@ class VideosListService
      * @param string $videoId
      * @return DateTime $scheduleStartTime
      */
-    public function getScheduledStartTime($videoId)
+    public function getScheduledStartTime(string $videoId): object
     {
         $url = $this->setUrl($videoId);
 
@@ -51,7 +52,8 @@ class VideosListService
         $video = json_decode($body, true);
 
         $date = $video["items"][0]["liveStreamingDetails"]["scheduledStartTime"];
-        $scheduleStartTime = new DateTime($date);
+        $dateTime = new DateTime($date);
+        $scheduleStartTime = $dateTime->setTimezone(new DateTimeZone('Asia/Tokyo'));
 
         return $scheduleStartTime;
     }
@@ -62,7 +64,7 @@ class VideosListService
      * @param DateTime $scheduleStartTime
      * @return string
      */
-    public function getStartTimeDiffToday($scheduleStartTime)
+    public function getStartTimeDiffToday(DateTime $scheduleStartTime): string
     {
         $now = new DateTime('now');
         $interval = $now->diff($scheduleStartTime);
@@ -76,7 +78,7 @@ class VideosListService
      * @param string $videoId
      * @return string
      */
-    public function setUrl($videoId)
+    public function setUrl(string $videoId): string
     {
         return "https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=" . $videoId . "&key=" . config('app.API_KEY');
     }
@@ -87,7 +89,7 @@ class VideosListService
      * @param string $videoId
      * @return string
      */
-    public function subSetUrl($videoId)
+    public function subSetUrl(string $videoId): string
     {
         return "https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=" . $videoId . "&key=" . config('app.SUB_API_KEY');
     }

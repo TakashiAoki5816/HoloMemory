@@ -1,8 +1,8 @@
 module.exports = {
     purge: [
-        './resources/**/*.blade.php',
-        './resources/**/*.js',
-        './resources/**/*.vue',
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
     ],
     darkMode: false, // or 'media' or 'class'
     theme: {
@@ -12,4 +12,4 @@ module.exports = {
         extend: {},
     },
     plugins: [],
-}
+};

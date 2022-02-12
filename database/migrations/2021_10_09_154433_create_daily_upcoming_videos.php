@@ -22,6 +22,8 @@ class CreateDailyUpcomingVideos extends Migration
             $table->string('thumbnails_url', 255);
             $table->dateTime('scheduled_start_time');
             $table->timestamps();
+
+            $table->foreign('channel_id')->references('channel_id')->on('HOLOLIVE_MEMBER_MST');
         });
     }
 
