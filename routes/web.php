@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'MainController@main')->name('root');
+Route::get('/404', 'MainController@index')->name('index');
+

@@ -2,13 +2,25 @@
 
 namespace App\Models;
 
+use App\Models\DailyUpcomingVideos;
 use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
     protected $table = 'HOLOLIVE_MEMBER_MST';
 
-    public function getAllMembers() {
-        return Member::all();
+    public function daily_upcoming_videos(): object
+    {
+        return $this->hasMany(DailyUpcomingVideos::class);
+    }
+
+    /**
+     * 所属している全メンバーを取得
+     *
+     * @return Member
+     */
+    public function getAllMembers(): object
+    {
+        return $this::all();
     }
 }

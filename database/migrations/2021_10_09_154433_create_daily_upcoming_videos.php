@@ -15,12 +15,15 @@ class CreateDailyUpcomingVideos extends Migration
     {
         Schema::create('daily_upcoming_videos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('video_id');
-            $table->string('channel_id', 255)->unique()->comment('チャンネルID、各チャンネルページのchannel/以降の文字列');
+            $table->string('country', '2');
+            $table->string('video_id', 255);
+            $table->string('channel_id', 255)->comment('チャンネルID、各チャンネルページのchannel/以降の文字列');
             $table->string('title', 255);
             $table->string('thumbnails_url', 255);
             $table->dateTime('scheduled_start_time');
             $table->timestamps();
+
+            $table->foreign('channel_id')->references('channel_id')->on('HOLOLIVE_MEMBER_MST');
         });
     }
 

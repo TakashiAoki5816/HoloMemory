@@ -3,7 +3,10 @@
 namespace App\Exceptions;
 
 use Exception;
+use App\Exceptions\RedirectExceptions;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+
 
 class Handler extends ExceptionHandler
 {
@@ -46,6 +49,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof RedirectExceptions) {
+            return Redirect::To($exception->redirectTo)
+                ->withErrors(['exception' => $exception->message, 'statusCode' => $exception->statusCode]);
+        }
+
         return parent::render($request, $exception);
     }
 }

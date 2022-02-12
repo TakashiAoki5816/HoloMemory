@@ -1,1 +1,34 @@
-//
+// Tailwind CSS
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .header {
+        @apply relative flex h-[80px] bg-slate-900;
+    }
+    .hamburger {
+        @apply absolute translate-y-0 top-[25%] ml-5 h-10 w-10 fill-current text-white;
+    }
+    .logo {
+        @apply text-white m-auto;
+    }
+    .date-section {
+        @apply w-full h-[60px] mt-9 bg-slate-900;
+    }
+    .lessons {
+        @apply flex flex-wrap items-center justify-start;
+    }
+    .lesson {
+        @apply w-[320px] h-[285px] mt-9 mr-12 border-2 border-gray-200;
+    }
+    .lesson-header {
+        @apply h-[40px] flex items-center justify-between;
+    }
+    .lesson-image {
+        @apply h-[180px];
+    }
+    .lesson-channel-icon {
+        @apply w-[60px] block m-auto;
+    }
+}

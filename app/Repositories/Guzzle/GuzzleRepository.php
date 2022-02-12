@@ -2,28 +2,40 @@
 
 namespace App\Repositories\Guzzle;
 
+use App\Consts\GuzzleRepositoryConsts;
+use App\Exceptions\RedirectExceptions;
 use App\Repositories\Guzzle\GuzzleRepositoryInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 
 class GuzzleRepository implements GuzzleRepositoryInterface
 {
-    public function firstRequest($method, $url)
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
+    public function firstRequest($url)
     {
         try {
-            return $this->client->request($method, $url);
+            return $this->client->request(GuzzleRepositoryConsts::GET_METHOD, $url);
+        } catch (ClientException $e) {
+            return $e;
         } catch (RequestException $e) {
-            // $content = json_decode($e->getResponse()->getBody()->getContents());
-            // return $content->error->message;
-            throw $e;
+            return $e;
         }
     }
 
-    public function secondRequest($method, $url) {
+    public function secondRequest($url) {
         try {
-            return $this->client->request($method, $url);
+            return $this->client->request(GuzzleRepositoryConsts::GET_METHOD, $url);
+        } catch (ClientException $e) {
+            //もう一つのAPIキーも使用できない場合
+            throw new RedirectExceptions(route('index'), $e->getMessage(), $e->getCode());
         } catch (RequestException $e) {
             //もう一つのAPIキーも使用できない場合
-            return redirect('/')->with('status', $e->getMessage());
+            throw new RedirectExceptions(route('index'), $e->getMessage(), $e->getCode());
         }
     }
 
