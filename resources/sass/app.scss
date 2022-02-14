@@ -13,11 +13,17 @@
     .logo {
         @apply text-white m-auto;
     }
-    .date-section {
-        @apply w-full h-[60px] mt-9 bg-slate-900;
+    .request-box {
+        @apply mt-5 text-right;
+    }
+    .request-button {
+        @apply bg-gray-700 hover:bg-gray-900 text-white font-bold py-2 px-4 border border-gray-900 rounded;
     }
     .lessons {
-        @apply flex flex-wrap items-center justify-start;
+        @apply flex flex-wrap items-center justify-start mt-5;
+    }
+    .date-section {
+        @apply w-full h-[60px] bg-slate-900;
     }
     .lesson {
         @apply w-[320px] h-[285px] mt-9 mr-12 border-2 border-gray-200;
