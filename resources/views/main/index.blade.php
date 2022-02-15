@@ -26,12 +26,22 @@
             <h1 class="logo">HoloMemory</h1>
         </header>
         <div class="container m-auto">
-            @if ($errors->has('exception'))
-            <div class="notification is-danger">
-                <p>{{ $errors->first('exception') }}</p>
-                <p>{{ $errors->first('statusCode') }}</p>
+            <div class="flex justify-between">
+                <div class="notification is-danger">
+                    @if ($errors->has('exception'))
+                    <p class="mt-5 font-bold text-red-600">{{ $errors->first('exception') . "(" .
+                        $errors->first('statusCode') .
+                        "エラー)" }}</p>
+                    @endif
+                </div>
+                <div class="request-box">
+                    <form method="GET" action="{{ route('main.request') }}">
+                        <button class="request-button" type="submit">
+                            最新の配信情報を取得
+                        </button>
+                    </form>
+                </div>
             </div>
-            @endif
             <main>
                 <div class="lessons">
                     @foreach ($videos as $key => $video)

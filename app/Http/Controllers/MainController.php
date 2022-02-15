@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Member;
 use App\Models\DailyUpcomingVideos;
 use App\Services\Youtube\SearchListService;
+use Illuminate\View\View;
 
 class MainController extends Controller
 {
@@ -24,28 +25,27 @@ class MainController extends Controller
     }
 
     /**
-     *　配信予定動画一覧を取得
+     * 配信予定動画一覧をviewに渡す
      *
-     * @return void
+     * @return View
      */
-    public function main()
+    public function main(): View
     {
-        $members = $this->member->getAllMembers();
-        $this->searchListService->requestSearchList($members);
         $videos = $this->dailyUpcomingVideos->getVideos();
-
-        //APIを叩けなかった場合はエラーメッセージを表示
-        // if ($response instanceof View) {
-        //     return view('main/error', ['message' => $response]);
-        // }
 
         return view('main/index', ['videos' => $videos]);
     }
 
-    public function index()
+    /**
+     * 最新の配信予定動画一覧を取得
+     *
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     */
+    public function request()
     {
-        $videos = $this->dailyUpcomingVideos->getVideos();
+        $members = $this->member->getAllMembers();
+        $this->searchListService->requestSearchList($members);
 
-        return view('main/index', ['videos' => $videos]);
+        return redirect()->route('root');
     }
 }
