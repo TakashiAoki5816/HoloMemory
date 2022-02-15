@@ -33,7 +33,7 @@ class SearchListService
      */
     public function requestSearchList(object $members): void
     {
-        $videos = $this->request($members);
+        $videos = $this->requestToYoutubeDataApi($members);
         $params = $this->storeParamsFromVideos($videos);
         $this->insertDailyUpcomingVideos($params);
     }
@@ -44,7 +44,7 @@ class SearchListService
      * @param Member $members
      * @return array $videos
      */
-    public function request(object $members): array
+    public function requestToYoutubeDataApi(object $members): array
     {
         $videos = array();
 
