@@ -7,7 +7,6 @@ use App\Exceptions\RedirectExceptions;
 use App\Repositories\Guzzle\GuzzleRepositoryInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
 
 class GuzzleRepository implements GuzzleRepositoryInterface
 {
@@ -32,10 +31,7 @@ class GuzzleRepository implements GuzzleRepositoryInterface
             return $this->client->request(GuzzleRepositoryConsts::GET_METHOD, $url);
         } catch (ClientException $e) {
             //もう一つのAPIキーも使用できない場合
-            throw new RedirectExceptions(route('index'), $e->getMessage(), $e->getCode());
-        } catch (RequestException $e) {
-            //もう一つのAPIキーも使用できない場合
-            throw new RedirectExceptions(route('index'), $e->getMessage(), $e->getCode());
+            throw new RedirectExceptions(route('root'), "1日のクォータ使用量を超えているため、リクエストを完了できません。", $e->getCode());
         }
     }
 
