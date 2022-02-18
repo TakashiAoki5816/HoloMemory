@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Member;
 use App\Models\DailyUpcomingVideos;
 use App\Services\Youtube\SearchListService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class MainController extends Controller
@@ -39,9 +40,9 @@ class MainController extends Controller
     /**
      * 最新の配信予定動画一覧を取得
      *
-     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function request()
+    public function request(): RedirectResponse
     {
         $members = $this->member->getAllMembers();
         $this->searchListService->requestSearchList($members);
