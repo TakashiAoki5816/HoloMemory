@@ -59,12 +59,28 @@ class Handler extends ExceptionHandler
 
     protected function renderHttpException(HttpExceptionInterface $exception)
     {
+        $image = $this->getRandImage();
         switch ($exception->getStatusCode()) {
             case 404:
-                $message = "存在しないページです。";
+                $message = "お探しのページは見つかりません。";
+                $statusCode = "404 Not Found";
                 break;
         }
 
-        return response()->view('main/error', ['message' => $message]);
+        return response()->view('main/error', ['message' => $message, 'statusCode' => $statusCode, 'image' => $image]);
+    }
+
+    /**
+     * エラー画像をランダムで取得
+     *
+     * @return string
+     */
+    protected function getRandImage()
+    {
+        $pathImages = glob('./images/*');
+        $images = str_replace("./images/", "", $pathImages);
+        $number = rand(0, count($images) - 1);
+
+        return $images[$number];
     }
 }
