@@ -6,7 +6,7 @@ use Exception;
 use App\Exceptions\RedirectExceptions;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class Handler extends ExceptionHandler
 {
@@ -55,5 +55,16 @@ class Handler extends ExceptionHandler
         }
 
         return parent::render($request, $exception);
+    }
+
+    protected function renderHttpException(HttpExceptionInterface $exception)
+    {
+        switch ($exception->getStatusCode()) {
+            case 404:
+                $message = "存在しないページです。";
+                break;
+        }
+
+        return response()->view('main/error', ['message' => $message]);
     }
 }
