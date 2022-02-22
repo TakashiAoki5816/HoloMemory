@@ -1,8 +1,8 @@
 <p align="center">
-<img src="https://img.shields.io/badge/Laravel-v6.20.32-orange?style=plastic&logo=laravel" alt="Laravel Version">
-<img src="https://img.shields.io/badge/PHP-v7.4.1-informational?style=plastic&logo=php" alt="PHP Version">
-<img src="https://img.shields.io/badge/Vue.js-v3.2.31-success?style=plastic&logo=vue.js" alt="Vue.js Version">
-<img src="https://img.shields.io/badge/Tailwind CSS-v3.0.8-9cf?style=plastic&logo=tailwindcss" alt="Tailwind CSS Version">
+    <img src="https://img.shields.io/badge/Laravel-v6.20.32-orange?style=plastic&logo=laravel" alt="Laravel Version">
+    <img src="https://img.shields.io/badge/PHP-v7.4.1-informational?style=plastic&logo=php" alt="PHP Version">
+    <img src="https://img.shields.io/badge/Vue.js-v3.2.31-success?style=plastic&logo=vue.js" alt="Vue.js Version">
+    <img src="https://img.shields.io/badge/Tailwind CSS-v3.0.8-9cf?style=plastic&logo=tailwindcss" alt="Tailwind CSS Version">
 </p>
 
 # HoloMemory
