@@ -2,10 +2,11 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use App\Exceptions\RedirectExceptions;
-use Illuminate\Support\Facades\Redirect;
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class Handler extends ExceptionHandler
@@ -57,6 +58,12 @@ class Handler extends ExceptionHandler
         return parent::render($request, $exception);
     }
 
+    /**
+     * HTTPエラーのレンダリング処理を共通化
+     *
+     * @param HttpExceptionInterface $exception
+     * @return Response
+     */
     protected function renderHttpException(HttpExceptionInterface $exception)
     {
         $image = $this->getRandImage();
@@ -67,7 +74,7 @@ class Handler extends ExceptionHandler
                 break;
         }
 
-        return response()->view('main/error', ['message' => $message, 'statusCode' => $statusCode, 'image' => $image]);
+        return response()->view('errors/common', ['message' => $message, 'statusCode' => $statusCode, 'image' => $image]);
     }
 
     /**
