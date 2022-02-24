@@ -11,7 +11,7 @@
         @apply absolute translate-y-0 top-[25%] ml-5 h-10 w-10 fill-current text-white;
     }
     .logo {
-        @apply text-white m-auto;
+        @apply m-auto text-red-400;
     }
     .request-box {
         @apply mt-5 text-right;
@@ -36,5 +36,8 @@
     }
     .lesson-channel-icon {
         @apply w-[60px] block m-auto;
+    }
+    .error-image {
+        @apply w-[300px] h-[300px] m-auto;
     }
 }
