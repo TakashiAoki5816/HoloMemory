@@ -35,7 +35,7 @@
                     @endif
                 </div>
                 <div class="request-box">
-                    <form method="GET" action="{{ route('main.request') }}">
+                    <form method="GET" action="{{ route('youtube.request') }}">
                         <button class="request-button" type="submit">
                             最新の配信情報を取得
                         </button>
