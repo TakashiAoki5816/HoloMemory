@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer="defer"></script>
+    <script src="{{ mix('js/app.js') }}" defer="defer"></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -16,6 +16,9 @@
 </head>
 
 <body>
+    <div id="app">
+        <example-component></example-component>
+    </div>
     <div class="w-full">
         <header class="header">
             <button>
@@ -43,6 +46,7 @@
                 </div>
             </div>
             <main>
+                @if (isset($videos))
                 <div class="lessons">
                     @foreach ($videos as $key => $video)
                     {{-- 日付の境界線チェック --}}
@@ -74,6 +78,7 @@
                     </div>
                     @endforeach
                 </div>
+                @endif
             </main>
         </div>
     </div>
