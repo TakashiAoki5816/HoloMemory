@@ -1,2 +1,5 @@
 <?php
-Route::get('youtube/request', 'MainController@request')->name('youtube.request');
+Route::middleware(['middleware' => 'api'])->group(function () {
+    Route::get('/videos', 'YoutubeController@index')->name('videos.index');
+    Route::get('/videos/create', 'YoutubeController@store')->name('videos.create');
+});
