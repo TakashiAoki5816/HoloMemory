@@ -17,25 +17,29 @@ class SearchListService
     protected $videosListService;
 
     /**
+     * @param Member $member
      * @param GuzzleRepositoryInterface $clientInterface
      * @param VideosListService $videosListService
      */
-    public function __construct(GuzzleRepositoryInterface $clientInterface, VideosListService $videosListService)
+    public function __construct(Member $member, GuzzleRepositoryInterface $clientInterface, VideosListService $videosListService)
     {
+        $this->member = $member;
         $this->clientInterface = $clientInterface;
         $this->videosListService = $videosListService;
     }
 
     /**
-     * Youtube Data API Search_Listを叩き、daily_upcoming_videosに格納
+     * Youtube Data API Search_Listを叩き、$paramsに格納
      *
-     * @return void
+     * @return Array $params
      */
-    public function requestSearchList(object $members): void
+    public function requestSearchList(): array
     {
+        $members = $this->member->getAllMembers();
         $videos = $this->requestToYoutubeDataApi($members);
         $params = $this->storeParamsFromVideos($videos);
-        $this->insertDailyUpcomingVideos($params);
+
+        return $params;
     }
 
     /**
