@@ -10,11 +10,15 @@ use Illuminate\Database\Eloquent\Model;
 class DailyUpcomingVideos extends Model
 {
     protected $table = 'daily_upcoming_videos';
+    protected $appends = [
+        'start_date',
+        'start_time',
+    ];
 
     /**
      * memberのリレーション取得
      *
-     * @return void
+     * @return object Member
      */
     public function member(): object
     {
@@ -24,7 +28,7 @@ class DailyUpcomingVideos extends Model
     /**
      * 登録されている配信予定動画を全て取得
      *
-     * @return DailyUpcomingVideos
+     * @return object DailyUpcomingVideos
      */
     public function getVideos(): object
     {
