@@ -16,8 +16,8 @@
         </div>
         <main>
             <div class="container">
-                <ul>
-                    <li v-for="(video, index) in videos" :key="index">
+                <div>
+                    <div v-for="(video, index) in videos" :key="index">
                         <div
                             class="date-section"
                             v-if="
@@ -29,51 +29,70 @@
                                 {{ video.start_date }}
                             </h2>
                         </div>
-                        <div class="lesson">
-                            <div class="lesson-header">
-                                <div>{{ video.start_time }}</div>
-                                <div>{{ video.member.name }}</div>
-                            </div>
-                            <div class="lesson-image">
-                                <a
-                                    v-bind:href="
-                                        'https://www.youtube.com/watch?v=' +
-                                        video.video_id
+                        <ul
+                            class="lessons"
+                            v-if="
+                                index === 0 ||
+                                video.start_date != videos[index - 1].start_date
+                            "
+                        >
+                            <li v-for="(lesson, index) in lessons" :key="index">
+                                <div
+                                    class="lesson"
+                                    v-if="
+                                        video.start_date === lesson.start_date
                                     "
-                                    target="_blank"
-                                    rel="noopener
-                            noreferrer"
                                 >
-                                    <img v-bind:src="video.thumbnails_url" />
-                                </a>
-                            </div>
-                            <div>
-                                <a
-                                    class="lesson-channel-icon"
-                                    v-bind:href="
-                                        'https://www.youtube.com/channel/' +
-                                        video.member.channel_id
-                                    "
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <img
-                                        v-bind:src="
-                                            video.member.channel_icon_url
-                                        "
-                                        style="
-                                            border-radius: 50%;
-                                            border: 2px#eeac5e solid;
-                                        "
-                                        width="60"
-                                        height="60"
-                                    />
-                                </a>
-                            </div>
-                            <!-- </div> -->
-                        </div>
-                    </li>
-                </ul>
+                                    <div class="lesson-header">
+                                        <div>{{ lesson.start_time }}</div>
+                                        <div>{{ lesson.member.name }}</div>
+                                    </div>
+                                    <div class="lesson-image">
+                                        <a
+                                            v-bind:href="
+                                                'https://www.youtube.com/watch?v=' +
+                                                lesson.video_id
+                                            "
+                                            target="_blank"
+                                            rel="noopener
+                                noreferrer"
+                                        >
+                                            <img
+                                                v-bind:src="
+                                                    lesson.thumbnails_url
+                                                "
+                                            />
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a
+                                            class="lesson-channel-icon"
+                                            v-bind:href="
+                                                'https://www.youtube.com/channel/' +
+                                                lesson.member.channel_id
+                                            "
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            <img
+                                                v-bind:src="
+                                                    lesson.member
+                                                        .channel_icon_url
+                                                "
+                                                style="
+                                                    border-radius: 50%;
+                                                    border: 2px#eeac5e solid;
+                                                "
+                                                width="60"
+                                                height="60"
+                                            />
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -85,6 +104,7 @@ export default {
     data: function () {
         return {
             videos: [],
+            lessons: [],
             error: {
                 exception: this.errors.exception,
                 statusCode: this.errors.statusCode,
@@ -96,11 +116,11 @@ export default {
             axios.get("api/videos").then((res) => {
                 console.log(res.data);
                 this.videos = res.data;
+                this.lessons = res.data;
             });
         },
         submit() {
             axios.get("/api/videos/create").then(() => {
-                // this.$router.push("/");
                 this.getVideos();
             });
         },
