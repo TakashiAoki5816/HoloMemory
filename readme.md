@@ -15,6 +15,48 @@
 そのため配信情報を可視化できるようなアプリを開発したいと考えた。<br>
 ホロライブを運営しているカバー株式会社が「ホロジュール」というメンバーのスケジュール管理アプリを既にリリースしているのだが、そこと差別化を図れるような取り組みを今後行っていく。(2022年2月21日現在)<br>
 
+## 事前準備
+- Google Cloud PlatformでYoutube Data APIを有効化したプロジェクトが作成済みであること（2つあると良し）
+
+## 環境構築
+1. envファイルを作成
+```shell
+copy .env.example .env
+```
+
+2. envファイル内で環境変数の値を設定
+```shell
+WEB_PORT=
+DB_PORT=
+
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+DB_ROOT_PASSWORD=
+
+API_KEY=
+# 2つプロジェクトを作成している場合
+SUB_API_KEY=
+```
+
+3. build
+```shell
+docker compose build
+
+docker compose up -d
+```
+
+4. composer インストール確認
+```shell
+composer -V
+Composer version 2.0.14 2021-05-21 17:03:37
+```
+
+5. Vue.js Install
+```
+npm install -D vue
+```
+
 ## 開発言語
 ### フロントエンド
 | 言語         | バージョン |
@@ -43,6 +85,7 @@
 | npm         | 8.1.2 |
 | webpack     | 5.9.0 |
 | laravel-mix | 6.0.18 |
+| vue-router | 4.0.12 |
 
 ## 機能一覧
 - 配信情報一覧
