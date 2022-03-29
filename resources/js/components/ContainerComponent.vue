@@ -14,9 +14,21 @@
                 </form>
             </div>
         </div>
+        <div>
+            <select class="select-group" v-model="selectedGroup">
+                <option value="ALL">全て</option>
+                <option
+                    v-for="group in groups"
+                    :key="group"
+                    v-bind:value="group.name"
+                >
+                    {{ group.name }}
+                </option>
+            </select>
+        </div>
         <main>
             <div class="container">
-                <div>
+                <div v-if="checkGroup">
                     <div v-for="(video, index) in videos" :key="index">
                         <div
                             class="date-section"
@@ -103,15 +115,22 @@ export default {
     props: ["errors"],
     data: function () {
         return {
+            groups: [],
             videos: [],
             lessons: [],
             error: {
                 exception: this.errors.exception,
                 statusCode: this.errors.statusCode,
             },
+            selectedGroup: "ALL",
         };
     },
     methods: {
+        getGroups() {
+            axios.get("api/groups").then((res) => {
+                this.groups = res.data;
+            });
+        },
         getVideos() {
             axios.get("api/videos").then((res) => {
                 console.log(res.data);
@@ -125,7 +144,8 @@ export default {
             });
         },
     },
-    mounted() {
+    created() {
+        this.getGroups();
         this.getVideos();
     },
 };
