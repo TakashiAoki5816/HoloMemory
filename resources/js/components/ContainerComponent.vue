@@ -125,6 +125,25 @@ export default {
             selectedGroup: "ALL",
         };
     },
+    computed: {
+        checkGroup: function () {
+            if (this.selectedGroup === "ALL") {
+                this.getVideos();
+                return true;
+            } else if (this.selectedGroup === "JP") {
+                this.getJpVideos();
+                return true;
+            } else if (this.selectedGroup === "EN") {
+                this.getEnVideos();
+                return true;
+            } else if (this.selectedGroup === "ID") {
+                this.getIdVideos();
+                return true;
+            }
+
+            return false;
+        },
+    },
     methods: {
         getGroups() {
             axios.get("api/groups").then((res) => {
@@ -134,6 +153,24 @@ export default {
         getVideos() {
             axios.get("api/videos").then((res) => {
                 console.log(res.data);
+                this.videos = res.data;
+                this.lessons = res.data;
+            });
+        },
+        getJpVideos() {
+            axios.get("api/videos/jp").then((res) => {
+                this.videos = res.data;
+                this.lessons = res.data;
+            });
+        },
+        getEnVideos() {
+            axios.get("api/videos/en").then((res) => {
+                this.videos = res.data;
+                this.lessons = res.data;
+            });
+        },
+        getIdVideos() {
+            axios.get("api/videos/id").then((res) => {
                 this.videos = res.data;
                 this.lessons = res.data;
             });
