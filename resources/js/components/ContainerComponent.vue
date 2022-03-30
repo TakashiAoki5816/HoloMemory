@@ -126,22 +126,26 @@ export default {
                 statusCode: this.errors.statusCode,
             },
             selectedGroup: "ALL",
+            all_url: "api/videos",
+            jp_url: "api/videos/jp",
+            en_url: "api/videos/en",
+            id_url: "api/videos/id",
             empty_message: "直近の配信予定はございません。",
         };
     },
     computed: {
         checkGroup: function () {
             if (this.selectedGroup === "ALL") {
-                this.getVideos();
+                this.getVideos(this.all_url);
                 return true;
             } else if (this.selectedGroup === "JP") {
-                this.getJpVideos();
+                this.getVideos(this.jp_url);
                 return true;
             } else if (this.selectedGroup === "EN") {
-                this.getEnVideos();
+                this.getVideos(this.en_url);
                 return true;
             } else if (this.selectedGroup === "ID") {
-                this.getIdVideos();
+                this.getVideos(this.id_url);
                 return true;
             }
 
@@ -157,27 +161,9 @@ export default {
                 this.groups = res.data;
             });
         },
-        getVideos() {
-            axios.get("api/videos").then((res) => {
+        getVideos(url) {
+            axios.get(url).then((res) => {
                 console.log(res.data);
-                this.videos = res.data;
-                this.lessons = res.data;
-            });
-        },
-        getJpVideos() {
-            axios.get("api/videos/jp").then((res) => {
-                this.videos = res.data;
-                this.lessons = res.data;
-            });
-        },
-        getEnVideos() {
-            axios.get("api/videos/en").then((res) => {
-                this.videos = res.data;
-                this.lessons = res.data;
-            });
-        },
-        getIdVideos() {
-            axios.get("api/videos/id").then((res) => {
                 this.videos = res.data;
                 this.lessons = res.data;
             });
@@ -190,7 +176,7 @@ export default {
     },
     created() {
         this.getGroups();
-        this.getVideos();
+        this.getVideos(this.all_url);
     },
 };
 </script>
