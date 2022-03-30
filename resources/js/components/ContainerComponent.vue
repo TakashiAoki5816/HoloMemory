@@ -28,6 +28,9 @@
         </div>
         <main>
             <div class="container">
+                <div v-if="checkEmptyVideos" class="text-center font-bold mt-5">
+                    {{ empty_message }}
+                </div>
                 <div v-if="checkGroup">
                     <div v-for="(video, index) in videos" :key="index">
                         <div
@@ -123,6 +126,7 @@ export default {
                 statusCode: this.errors.statusCode,
             },
             selectedGroup: "ALL",
+            empty_message: "直近の配信予定はございません。",
         };
     },
     computed: {
@@ -142,6 +146,9 @@ export default {
             }
 
             return false;
+        },
+        checkEmptyVideos: function () {
+            return !this.videos.length;
         },
     },
     methods: {

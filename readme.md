@@ -16,7 +16,7 @@
 ホロライブを運営しているカバー株式会社が「ホロジュール」というメンバーのスケジュール管理アプリを既にリリースしているのだが、そこと差別化を図れるような取り組みを今後行っていく。(2022年2月21日現在)<br>
 
 ## 事前準備
-- Google Cloud PlatformでYoutube Data APIを有効化したプロジェクトが作成済みであること（2つあると良し）
+- Google Cloud PlatformでYoutube Data APIを有効化したAPIキーが作成済みであること（1つでも可能だが、クォータ制限にすぐ引っかかってしまうため2つあると良い）
 
 ## 環境構築
 1. envファイルを作成
@@ -90,6 +90,7 @@ npm install -D vue
 ## 機能一覧
 - 配信情報一覧
 - YouTube Data APIを叩いた配信情報取得
+- ソート機能（JP, EN, ID）
 
 ## ER図
 ![HoloMemory](https://user-images.githubusercontent.com/56289802/154892094-dfcef436-0dac-4816-b433-436b92c047f3.jpg)
