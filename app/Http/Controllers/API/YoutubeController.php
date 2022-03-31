@@ -24,13 +24,41 @@ class YoutubeController extends Controller
     /**
      * 配信情報一覧取得
      *
-     * @return Array
+     * @return object Collection
      */
-    public function index()
+    public function index(): object
     {
-        $videos = $this->dailyUpcomingVideos->getVideos();
+        return $this->dailyUpcomingVideos->getVideos();
+    }
 
-        return $videos;
+    /**
+     * 日本グループの配信情報を取得
+     *
+     * @return object Collection
+     */
+    public function jp(): object
+    {
+        return $this->dailyUpcomingVideos->getJpVideos();
+    }
+
+    /**
+     * 英語グループの配信情報を取得
+     *
+     * @return object Collection
+     */
+    public function en(): object
+    {
+        return $this->dailyUpcomingVideos->getEnVideos();
+    }
+
+    /**
+     * インドネシアグループの配信情報を取得
+     *
+     * @return object Collection
+     */
+    public function id(): object
+    {
+        return $this->dailyUpcomingVideos->getIdVideos();
     }
 
     /**
