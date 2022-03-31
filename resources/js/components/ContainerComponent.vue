@@ -135,21 +135,22 @@ export default {
     },
     computed: {
         checkGroup: function () {
-            if (this.selectedGroup === "ALL") {
-                this.getVideos(this.all_url);
-                return true;
-            } else if (this.selectedGroup === "JP") {
-                this.getVideos(this.jp_url);
-                return true;
-            } else if (this.selectedGroup === "EN") {
-                this.getVideos(this.en_url);
-                return true;
-            } else if (this.selectedGroup === "ID") {
-                this.getVideos(this.id_url);
-                return true;
+            switch (this.selectedGroup) {
+                case "ALL":
+                    this.getVideos(this.all_url);
+                    return true;
+                case "JP":
+                    this.getVideos(this.jp_url);
+                    return true;
+                case "EN":
+                    this.getVideos(this.en_url);
+                    return true;
+                case "ID":
+                    this.getVideos(this.id_url);
+                    return true;
+                default:
+                    return false;
             }
-
-            return false;
         },
         checkEmptyVideos: function () {
             return !this.videos.length;
@@ -170,7 +171,7 @@ export default {
         },
         submit() {
             axios.get("/api/videos/create").then(() => {
-                this.getVideos();
+                this.checkGroup();
             });
         },
     },
