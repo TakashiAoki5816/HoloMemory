@@ -14,9 +14,24 @@
                 </form>
             </div>
         </div>
+        <div>
+            <select class="select-group" v-model="selectedGroup">
+                <option value="ALL">全て</option>
+                <option
+                    v-for="group in groups"
+                    :key="group"
+                    v-bind:value="group.name"
+                >
+                    {{ group.name }}
+                </option>
+            </select>
+        </div>
         <main>
             <div class="container">
-                <div>
+                <div v-if="checkEmptyVideos" class="text-center font-bold mt-5">
+                    {{ empty_message }}
+                </div>
+                <div v-if="checkGroup">
                     <div v-for="(video, index) in videos" :key="index">
                         <div
                             class="date-section"
@@ -103,17 +118,52 @@ export default {
     props: ["errors"],
     data: function () {
         return {
+            groups: [],
             videos: [],
             lessons: [],
             error: {
                 exception: this.errors.exception,
                 statusCode: this.errors.statusCode,
             },
+            selectedGroup: "ALL",
+            all_url: "api/videos",
+            jp_url: "api/videos/jp",
+            en_url: "api/videos/en",
+            id_url: "api/videos/id",
+            empty_message: "直近の配信予定はございません。",
         };
     },
+    computed: {
+        checkGroup: function () {
+            switch (this.selectedGroup) {
+                case "ALL":
+                    this.getVideos(this.all_url);
+                    return true;
+                case "JP":
+                    this.getVideos(this.jp_url);
+                    return true;
+                case "EN":
+                    this.getVideos(this.en_url);
+                    return true;
+                case "ID":
+                    this.getVideos(this.id_url);
+                    return true;
+                default:
+                    return false;
+            }
+        },
+        checkEmptyVideos: function () {
+            return !this.videos.length;
+        },
+    },
     methods: {
-        getVideos() {
-            axios.get("api/videos").then((res) => {
+        getGroups() {
+            axios.get("api/groups").then((res) => {
+                this.groups = res.data;
+            });
+        },
+        getVideos(url) {
+            axios.get(url).then((res) => {
                 console.log(res.data);
                 this.videos = res.data;
                 this.lessons = res.data;
@@ -121,12 +171,13 @@ export default {
         },
         submit() {
             axios.get("/api/videos/create").then(() => {
-                this.getVideos();
+                this.checkGroup();
             });
         },
     },
-    mounted() {
-        this.getVideos();
+    created() {
+        this.getGroups();
+        this.getVideos(this.all_url);
     },
 };
 </script>

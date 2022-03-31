@@ -21,6 +21,6 @@ class Member extends Model
      */
     public function getAllMembers(): object
     {
-        return $this::all();
+        return $this->all();
     }
 }
