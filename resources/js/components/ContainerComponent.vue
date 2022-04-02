@@ -131,6 +131,7 @@ export default {
             en_url: "api/videos/en",
             id_url: "api/videos/id",
             empty_message: "直近の配信予定はございません。",
+            undefind_group_message: "存在しないグループです。",
         };
     },
     computed: {
@@ -162,6 +163,24 @@ export default {
                 this.groups = res.data;
             });
         },
+        getGroupVideos() {
+            switch (this.selectedGroup) {
+                case "ALL":
+                    this.getVideos(this.all_url);
+                    break;
+                case "JP":
+                    this.getVideos(this.jp_url);
+                    break;
+                case "EN":
+                    this.getVideos(this.en_url);
+                    break;
+                case "ID":
+                    this.getVideos(this.id_url);
+                    break;
+                default:
+                    return this.undefind_group_message;
+            }
+        },
         getVideos(url) {
             axios.get(url).then((res) => {
                 console.log(res.data);
@@ -171,7 +190,7 @@ export default {
         },
         submit() {
             axios.get("/api/videos/create").then(() => {
-                this.checkGroup();
+                this.getGroupVideos();
             });
         },
     },
