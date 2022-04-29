@@ -72,6 +72,10 @@ class Handler extends ExceptionHandler
                 $message = "お探しのページは見つかりません。";
                 $statusCode = "404 Not Found";
                 break;
+            case 419:
+                $message = "CSRFトークンが一致していません。";
+                $statusCode = "419 CSRF token mismatch";
+                break;
         }
 
         return response()->view('errors/common', ['message' => $message, 'statusCode' => $statusCode, 'image' => $image]);
