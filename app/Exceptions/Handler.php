@@ -76,6 +76,9 @@ class Handler extends ExceptionHandler
                 $message = "CSRFトークンが一致していません。";
                 $statusCode = "419 CSRF token mismatch";
                 break;
+            default:
+                $message = "何らかのエラーが発生しました";
+                $statusCode = $exception->getStatusCode();
         }
 
         return response()->view('errors/common', ['message' => $message, 'statusCode' => $statusCode, 'image' => $image]);
