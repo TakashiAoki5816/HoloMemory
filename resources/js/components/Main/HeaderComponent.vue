@@ -7,7 +7,9 @@
                 />
             </svg>
         </button>
-        <h1 class="logo">HoloMemory</h1>
+        <h1 class="logo">
+            <a href="/">HoloMemory</a>
+        </h1>
         <Auth :csrf="csrf"></Auth>
     </header>
 </template>

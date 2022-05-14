@@ -58,13 +58,18 @@
                     </label>
                 </div>
             </div>
-            <div class="flex items-start mt-6">
+            <div class="mt-6">
                 <div class="">
                     <button type="submit" class="form-submit">
                         {{ __('Login') }}
                     </button>
+                </div>
+                <div class="block mt-4">
+                    @if (Route::has('register'))
+                    <a href="{{ route('register') }}">{{ __('Register') }}</a>
+                    @endif
                     @if (Route::has('password.request'))
-                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                    <a class="ml-6" href="{{ route('password.request') }}">
                         {{ __('Forgot Your Password?') }}
                     </a>
                     @endif
