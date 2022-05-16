@@ -42,6 +42,7 @@
                     <input id="password" type="password"
                         class="form-input w-11/12 @error('password') border-red-500 @enderror" name="password" required
                         autocomplete="current-password">
+
                     @error('password')
                     <span class="text-red-500" role="alert">
                         <strong>{{ $message }}</strong>
@@ -59,7 +60,7 @@
                 </div>
             </div>
             <div class="mt-6">
-                <div class="">
+                <div>
                     <button type="submit" class="form-submit">
                         {{ __('Login') }}
                     </button>
