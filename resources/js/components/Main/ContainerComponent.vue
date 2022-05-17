@@ -1,10 +1,20 @@
 <template>
     <div class="container m-auto">
         <div class="flex justify-between">
+            <div class="mt-5">
+                <select class="select-group" v-model="selectedGroup">
+                    <option value="ALL">全て</option>
+                    <option
+                        v-for="group in groups"
+                        :key="group"
+                        v-bind:value="group.name"
+                    >
+                        {{ group.name }}
+                    </option>
+                </select>
+            </div>
             <div class="notification is-danger">
-                <strong class="mt-5 font-bold text-red-600">
-                    {{ error.exception + "(" + error.statusCode + "エラー)" }}
-                </strong>
+                <strong class="mt-5 font-bold text-red-600"> </strong>
             </div>
             <div class="request-box">
                 <form v-on:submit.prevent="submit">
@@ -14,20 +24,8 @@
                 </form>
             </div>
         </div>
-        <div>
-            <select class="select-group" v-model="selectedGroup">
-                <option value="ALL">全て</option>
-                <option
-                    v-for="group in groups"
-                    :key="group"
-                    v-bind:value="group.name"
-                >
-                    {{ group.name }}
-                </option>
-            </select>
-        </div>
         <main>
-            <div class="container">
+            <div>
                 <div v-if="checkEmptyVideos" class="text-center font-bold mt-5">
                     {{ empty_message }}
                 </div>
@@ -115,16 +113,11 @@
 
 <script>
 export default {
-    props: ["errors"],
     data: function () {
         return {
             groups: [],
             videos: [],
             lessons: [],
-            error: {
-                exception: this.errors.exception,
-                statusCode: this.errors.statusCode,
-            },
             selectedGroup: "ALL",
             all_url: "api/videos",
             jp_url: "api/videos/jp",

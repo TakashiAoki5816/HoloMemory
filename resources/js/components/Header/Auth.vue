@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!checkLogin" class="my-auto mr-10">
+    <div v-if="!checkLogin" class="my-auto mr-5">
         <a class="text-gray-100" :href="loginRoute">{{ loginText }}</a>
     </div>
     <div v-else class="my-auto mr-10">

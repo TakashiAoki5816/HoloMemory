@@ -5,13 +5,13 @@
 
 @layer components {
     .header {
-        @apply relative flex h-[80px] bg-slate-900;
+        @apply flex justify-between h-[80px] bg-slate-900;
     }
     .hamburger {
-        @apply absolute translate-y-0 top-[25%] ml-5 h-10 w-10 fill-current text-white;
+        @apply ml-5 h-10 w-10 text-white;
     }
     .logo {
-        @apply m-auto text-red-400;
+        @apply my-auto text-2xl text-blue-300;
     }
     .request-box {
         @apply mt-5 text-right;
