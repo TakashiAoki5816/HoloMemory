@@ -41,10 +41,10 @@
         @apply flex flex-wrap items-center justify-start;
     }
     .date-section {
-        @apply w-full h-[60px] bg-slate-900 mt-7;
+        @apply h-[60px] bg-slate-900 mt-7;
     }
     .lesson {
-        @apply w-[320px] mt-7 mr-12 border-2 border-gray-200;
+        @apply w-[330px] mt-7 mr-10 border-2 border-gray-200;
     }
     .lesson-header {
         @apply h-[40px] flex items-center justify-between;

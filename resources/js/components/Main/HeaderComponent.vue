@@ -1,12 +1,10 @@
 <template>
     <header class="header">
-        <button>
-            <svg class="hamburger" viewBox="0 0 24 24">
-                <path
-                    d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z"
-                />
-            </svg>
-        </button>
+        <Slide>
+            <a id="home" href="#">
+                <span>Home</span>
+            </a>
+        </Slide>
         <h1 class="logo">
             <a href="/">HoloMemory</a>
         </h1>
@@ -16,11 +14,27 @@
 
 <script>
 import Auth from "../Header/Auth.vue";
+import { Slide } from "vue3-burger-menu";
 
 export default {
     components: {
         Auth,
+        Slide,
     },
     props: ["csrf"],
 };
 </script>
+<style>
+.bm-burger-button {
+    top: 25px;
+    left: 25px;
+}
+
+.bm-burger-bars {
+    background-color: rgb(239, 239, 239);
+}
+
+.bm-overlay {
+    background-color: #fff;
+}
+</style>
