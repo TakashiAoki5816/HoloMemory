@@ -1,24 +1,27 @@
 <template>
-    <div v-if="!checkLogin" class="my-auto mr-5">
-        <a class="text-gray-100" :href="loginRoute">{{ loginText }}</a>
+    <div v-if="checkLogin" class="my-auto mr-5">
+        <div v-if="!checkLogin">
+            <a class="text-gray-100" :href="loginRoute">{{ loginText }}</a>
+        </div>
+        <div v-else>
+            <a
+                class="text-gray-100"
+                :href="logoutRoute"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+            >
+                {{ logoutText }}
+            </a>
+            <form
+                id="logout-form"
+                :action="logoutRoute"
+                method="POST"
+                style="display: none"
+            >
+                <input type="hidden" name="_token" v-bind:value="csrf" />
+            </form>
+        </div>
     </div>
-    <div v-else class="my-auto mr-10">
-        <a
-            class="text-gray-100"
-            :href="logoutRoute"
-            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-        >
-            {{ logoutText }}
-        </a>
-        <form
-            id="logout-form"
-            :action="logoutRoute"
-            method="POST"
-            style="display: none"
-        >
-            <input type="hidden" name="_token" v-bind:value="csrf" />
-        </form>
-    </div>
+    <div v-else></div>
 </template>
 <script>
 export default {
@@ -29,7 +32,7 @@ export default {
             logoutText: "Logout",
             logoutRoute: "/logout",
             user: {},
-            checkLogin: "",
+            checkLogin: false,
         };
     },
     props: ["csrf"],
