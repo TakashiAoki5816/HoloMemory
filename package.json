@@ -32,6 +32,7 @@
     "dependencies": {
         "sass-loader": "^12.4.0",
         "vue-router": "^4.0.12",
+        "vue3-burger-menu": "^1.1.1",
         "webpack": "^5.9.0"
     }
 }

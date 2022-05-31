@@ -1,10 +1,25 @@
 <template>
-    <div class="container m-auto">
+    <div class="w-10/12 m-auto">
         <div class="flex justify-between">
+            <div class="mt-5">
+                <select
+                    v-if="groups.length > 0"
+                    class="select-group"
+                    v-model="selectedGroup"
+                    @change="fetchGroup"
+                >
+                    <option value="ALL">全て</option>
+                    <option
+                        v-for="group in groups"
+                        :key="group"
+                        :value="group.name"
+                    >
+                        {{ group.name }}
+                    </option>
+                </select>
+            </div>
             <div class="notification is-danger">
-                <strong class="mt-5 font-bold text-red-600">
-                    {{ error.exception + "(" + error.statusCode + "エラー)" }}
-                </strong>
+                <strong class="mt-5 font-bold text-red-600"></strong>
             </div>
             <div class="request-box">
                 <form v-on:submit.prevent="submit">
@@ -14,24 +29,9 @@
                 </form>
             </div>
         </div>
-        <div>
-            <select class="select-group" v-model="selectedGroup">
-                <option value="ALL">全て</option>
-                <option
-                    v-for="group in groups"
-                    :key="group"
-                    v-bind:value="group.name"
-                >
-                    {{ group.name }}
-                </option>
-            </select>
-        </div>
         <main>
-            <div class="container">
-                <div v-if="checkEmptyVideos" class="text-center font-bold mt-5">
-                    {{ empty_message }}
-                </div>
-                <div v-if="checkGroup">
+            <div>
+                <div v-if="videos.length">
                     <div v-for="(video, index) in videos" :key="index">
                         <div
                             class="date-section"
@@ -108,6 +108,9 @@
                         </ul>
                     </div>
                 </div>
+                <div v-else class="text-center font-bold mt-5">
+                    {{ empty_message }}
+                </div>
             </div>
         </main>
     </div>
@@ -115,16 +118,11 @@
 
 <script>
 export default {
-    props: ["errors"],
     data: function () {
         return {
             groups: [],
-            videos: [],
+            videos: ["1"],
             lessons: [],
-            error: {
-                exception: this.errors.exception,
-                statusCode: this.errors.statusCode,
-            },
             selectedGroup: "ALL",
             all_url: "api/videos",
             jp_url: "api/videos/jp",
@@ -134,34 +132,29 @@ export default {
             undefind_group_message: "存在しないグループです。",
         };
     },
-    computed: {
-        checkGroup: function () {
-            switch (this.selectedGroup) {
-                case "ALL":
-                    this.getVideos(this.all_url);
-                    return true;
-                case "JP":
-                    this.getVideos(this.jp_url);
-                    return true;
-                case "EN":
-                    this.getVideos(this.en_url);
-                    return true;
-                case "ID":
-                    this.getVideos(this.id_url);
-                    return true;
-                default:
-                    return false;
-            }
-        },
-        checkEmptyVideos: function () {
-            return !this.videos.length;
-        },
-    },
     methods: {
         getGroups() {
             axios.get("api/groups").then((res) => {
                 this.groups = res.data;
             });
+        },
+        fetchGroup() {
+            switch (this.selectedGroup) {
+                case "ALL":
+                    this.getVideos(this.all_url);
+                    break;
+                case "JP":
+                    this.getVideos(this.jp_url);
+                    break;
+                case "EN":
+                    this.getVideos(this.en_url);
+                    break;
+                case "ID":
+                    this.getVideos(this.id_url);
+                    break;
+                default:
+                    "存在しないグループです。";
+            }
         },
         getGroupVideos() {
             switch (this.selectedGroup) {
@@ -194,7 +187,7 @@ export default {
             });
         },
     },
-    created() {
+    mounted() {
         this.getGroups();
         this.getVideos(this.all_url);
     },
