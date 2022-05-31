@@ -18,8 +18,8 @@
 <body>
     <div id="app">
         <div class="w-full">
-            <header-component></header-component>
-            <container-component :errors="{{ $errors }}">
+            <header-component :csrf="{{ json_encode(csrf_token()) }}"></header-component>
+            <container-component>
             </container-component>
         </div>
     </div>
