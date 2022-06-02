@@ -1,5 +1,5 @@
 <template>
-    <div v-if="checkLogin" class="my-auto mr-5">
+    <div v-if="delayLoginText" class="my-auto mr-5">
         <div v-if="!checkLogin">
             <a class="text-gray-100" :href="loginRoute">{{ loginText }}</a>
         </div>
@@ -32,7 +32,7 @@ export default {
             logoutText: "Logout",
             logoutRoute: "/logout",
             user: {},
-            checkLogin: false,
+            delayLoginText: false,
         };
     },
     props: ["csrf"],
@@ -44,13 +44,14 @@ export default {
             });
         },
         isEmptyKeysLength(obj) {
+            this.delayLoginText = true;
             if (Object.keys(obj).length === 0) {
                 return (this.checkLogin = false);
             }
             return (this.checkLogin = true);
         },
     },
-    created: function () {
+    mounted: function () {
         this.getUser();
     },
 };
