@@ -22,7 +22,7 @@
                 <strong class="mt-5 font-bold text-red-600"></strong>
             </div>
             <div class="request-box">
-                <form v-on:submit.prevent="submit">
+                <form v-on:submit.prevent="clickLatestRequest">
                     <button class="request-button" type="submit">
                         最新の配信情報を取得
                     </button>
@@ -172,6 +172,11 @@ export default {
                     break;
                 default:
                     return this.undefind_group_message;
+            }
+        },
+        clickLatestRequest() {
+            if (confirm("最新の配信情報を取得しますか？")) {
+                this.submit();
             }
         },
         getVideos(url) {
