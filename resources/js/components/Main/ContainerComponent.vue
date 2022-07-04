@@ -5,7 +5,6 @@
                 <select
                     v-if="groups.length > 0"
                     class="select-group"
-                    v-model="selectedGroup"
                     @change="fetchGroup"
                 >
                     <option value="ALL">全て</option>
@@ -121,9 +120,8 @@ export default {
     data: function () {
         return {
             groups: [],
-            videos: ["1"],
+            videos: [1],
             lessons: [],
-            selectedGroup: "ALL",
             all_url: "api/videos",
             jp_url: "api/videos/jp",
             en_url: "api/videos/en",
@@ -138,8 +136,8 @@ export default {
                 this.groups = res.data;
             });
         },
-        fetchGroup() {
-            switch (this.selectedGroup) {
+        fetchGroup(selectedGroup) {
+            switch (selectedGroup.target.value) {
                 case "ALL":
                     this.getVideos(this.all_url);
                     break;
