@@ -5,7 +5,7 @@
                 <select
                     v-if="groups.length > 0"
                     class="select-group"
-                    @change="fetchGroup"
+                    @change="changeGroup"
                 >
                     <option value="ALL">全て</option>
                     <option
@@ -21,7 +21,7 @@
                 <strong class="mt-5 font-bold text-red-600"></strong>
             </div>
             <div class="request-box">
-                <form v-on:submit.prevent="clickLatestRequest">
+                <form v-on:submit.prevent="confirmRequest">
                     <button class="request-button" type="submit">
                         最新の配信情報を取得
                     </button>
@@ -122,6 +122,7 @@ export default {
             groups: [],
             videos: [1],
             lessons: [],
+            selectedGroup: "ALL",
             all_url: "api/videos",
             jp_url: "api/videos/jp",
             en_url: "api/videos/en",
@@ -131,68 +132,69 @@ export default {
         };
     },
     methods: {
-        getGroups() {
+        fetchGroups() {
             axios.get("api/groups").then((res) => {
                 this.groups = res.data;
             });
         },
-        fetchGroup(selectedGroup) {
+        changeGroup(selectedGroup) {
+            this.selectedGroup = selectedGroup.target.value;
             switch (selectedGroup.target.value) {
                 case "ALL":
-                    this.getVideos(this.all_url);
+                    this.fetchVideos(this.all_url);
                     break;
                 case "JP":
-                    this.getVideos(this.jp_url);
+                    this.fetchVideos(this.jp_url);
                     break;
                 case "EN":
-                    this.getVideos(this.en_url);
+                    this.fetchVideos(this.en_url);
                     break;
                 case "ID":
-                    this.getVideos(this.id_url);
+                    this.fetchVideos(this.id_url);
                     break;
                 default:
                     "存在しないグループです。";
             }
         },
-        getGroupVideos() {
-            switch (this.selectedGroup) {
-                case "ALL":
-                    this.getVideos(this.all_url);
-                    break;
-                case "JP":
-                    this.getVideos(this.jp_url);
-                    break;
-                case "EN":
-                    this.getVideos(this.en_url);
-                    break;
-                case "ID":
-                    this.getVideos(this.id_url);
-                    break;
-                default:
-                    return this.undefind_group_message;
-            }
-        },
-        clickLatestRequest() {
-            if (confirm("最新の配信情報を取得しますか？")) {
-                this.submit();
-            }
-        },
-        getVideos(url) {
+        fetchVideos(url) {
             axios.get(url).then((res) => {
                 console.log(res.data);
                 this.videos = res.data;
                 this.lessons = res.data;
             });
         },
-        submit() {
+        confirmRequest() {
+            if (confirm("最新の配信情報を取得しますか？")) {
+                this.fetchLatestVideos();
+            }
+        },
+        fetchLatestVideos() {
             axios.get("/api/videos/create").then(() => {
-                this.getGroupVideos();
+                this.fetchGroupVideos();
             });
+        },
+        fetchGroupVideos() {
+            switch (this.selectedGroup) {
+                case "ALL":
+                    this.fetchVideos(this.all_url);
+                    break;
+                case "JP":
+                    this.fetchVideos(this.jp_url);
+                    break;
+                case "EN":
+                    this.fetchVideos(this.en_url);
+                    break;
+                case "ID":
+                    this.fetchVideos(this.id_url);
+                    break;
+                default:
+                    return this.undefind_group_message;
+            }
         },
     },
     mounted() {
-        this.getGroups();
-        this.getVideos(this.all_url);
+        this.fetchGroups();
+        this.fetchVideos(this.all_url);
     },
 };
 </script>
