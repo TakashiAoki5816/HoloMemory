@@ -1,8 +1,8 @@
 <template>
     <header class="header">
         <Slide>
-            <a id="home" href="#">
-                <span>Home</span>
+            <a id="member" :href="this.member_url">
+                <span>{{ this.member }}</span>
             </a>
         </Slide>
         <h1 class="logo">
@@ -17,6 +17,12 @@ import Auth from "../Header/Auth.vue";
 import { Slide } from "vue3-burger-menu";
 
 export default {
+    data: function () {
+        return {
+            member_url: "/api/member/index",
+            member: "Member",
+        };
+    },
     components: {
         Auth,
         Slide,
