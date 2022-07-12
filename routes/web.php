@@ -9,3 +9,7 @@ Route::get('/user', function (Request $request) {
     $user = $request->user();
     return response()->json($user);
 });
+
+Route::group(['prefix' => 'member', 'as' => 'member.'], function () {
+    Route::get('/index', 'MemberController@index')->name('index');
+});

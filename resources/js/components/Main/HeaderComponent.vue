@@ -19,7 +19,7 @@ import { Slide } from "vue3-burger-menu";
 export default {
     data: function () {
         return {
-            member_url: "/api/member/index",
+            member_url: "/member/index",
             member: "Member",
         };
     },
