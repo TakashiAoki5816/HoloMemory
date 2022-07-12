@@ -7,7 +7,7 @@ use Illuminate\View\View;
 class MainController extends Controller
 {
     /**
-     * viewを表示
+     * トップページを表示
      *
      * @return View
      */
