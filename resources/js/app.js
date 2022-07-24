@@ -3,6 +3,7 @@ import { createApp } from "vue";
 // import { createRouter, createWebHistory } from "vue-router";
 import HeaderComponent from "./components/Main/HeaderComponent.vue";
 import ContainerComponent from "./components/Main/ContainerComponent.vue";
+import MembersComponent from "./components/Main/MembersComponent.vue";
 
 // const routes = [
 //     {
@@ -21,6 +22,7 @@ const app = createApp({
     components: {
         HeaderComponent,
         ContainerComponent,
+        MembersComponent,
     },
 });
 

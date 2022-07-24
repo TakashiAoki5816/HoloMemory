@@ -11,5 +11,5 @@ Route::get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'member', 'as' => 'member.'], function () {
-    Route::get('/index', 'MemberController@index')->name('index');
+    Route::get('/index', 'MembersController@index')->name('index');
 });

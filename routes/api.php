@@ -11,6 +11,6 @@ Route::middleware(['middleware' => 'api'])->group(function () {
     });
 
     Route::group(['prefix' => 'member', 'as' => 'member.'], function () {
-        Route::get('/index', 'Api\MemberController@index')->name('index');
+        Route::get('/index', 'Api\MembersController@index')->name('index');
     });
 });
