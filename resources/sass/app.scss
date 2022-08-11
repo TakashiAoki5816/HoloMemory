@@ -55,6 +55,42 @@
     .lesson-channel-icon {
         @apply w-[60px] block m-auto;
     }
+    .generation-box {
+        @apply mt-5 h-[30px] bg-green-200;
+    }
+    .generation-text {
+        @apply leading-[30px];
+    }
+    .member-box {
+        @apply h-[80px] flex mt-3;
+    }
+    .member-left-box {
+        @apply flex w-1/4 bg-slate-400;
+    }
+    .member-image-box {
+        @apply w-1/3 bg-amber-300;
+    }
+    .member-image {
+        @apply w-full h-[80px];
+    }
+    .member-name-box {
+        @apply w-2/3;
+    }
+    .member-name {
+        @apply ml-3 leading-[80px];
+    }
+    .member-right-box {
+        @apply w-3/4;
+    }
+    .member-like-box {
+        @apply h-[80px];
+    }
+    .member-like-button {
+        @apply h-[80px] text-right leading-[80px];
+    }
+    .member-like-icon {
+        @apply h-[20px] w-[30px] text-amber-400;
+    }
     .error-image {
         @apply w-[300px] h-[300px] m-auto;
     }
