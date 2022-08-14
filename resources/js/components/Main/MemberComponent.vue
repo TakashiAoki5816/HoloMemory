@@ -19,7 +19,7 @@
         <div class="members-container">
             <div v-for="(member, index) in members" :key="index">
                 <div
-                    class="country-box"
+                    :class="[index === 0 ? countryBoxMt0 : countryBox]"
                     v-if="
                         index === 0 ||
                         member.country != members[index - 1].country
@@ -36,7 +36,12 @@
                 >
                     <div class="generation-line">
                         <h2 class="generation-name">
-                            {{ member.graduate_id }}期生
+                            {{
+                                generationName(
+                                    member.country,
+                                    member.graduate_id
+                                )
+                            }}
                         </h2>
                     </div>
                 </div>
@@ -82,6 +87,8 @@ export default {
             groups: [],
             members: [],
             selectedGroup: "ALL",
+            countryBox: "country-box",
+            countryBoxMt0: "country-box-mt-0",
             all_url: "api/videos",
             jp_url: "api/videos/jp",
             en_url: "api/videos/en",
@@ -118,6 +125,57 @@ export default {
                 this.members = res.data;
                 console.log(this.members);
             });
+        },
+        generationName(country, graduate_id) {
+            console.log(graduate_id);
+            switch (country) {
+                case "JP":
+                    console.log("Hello");
+                    switch (graduate_id) {
+                        case 0:
+                            return "０期生";
+                        case 1:
+                            return "１期生";
+                        case 2:
+                            return "２期生";
+                        case 3:
+                            return "３期生";
+                        case 4:
+                            return "4期生";
+                        case 5:
+                            return "5期生";
+                        case 6:
+                            return "秘密結社holoX";
+                        case 99:
+                            return "ホロライブゲーマーズ";
+                        default:
+                            return "JP 該当なし";
+                    }
+                case "EN":
+                    switch (graduate_id) {
+                        case 1:
+                            return "Myth";
+                        case 2:
+                            return "Council";
+                        case 98:
+                            return "Project: HOPE";
+                        default:
+                            return "EN 該当なし";
+                    }
+                case "ID":
+                    switch (graduate_id) {
+                        case 1:
+                            return "1期生";
+                        case 2:
+                            return "2期生";
+                        case 3:
+                            return "３期生";
+                        default:
+                            return "ID 該当なし";
+                    }
+                default:
+                    return "該当なし";
+            }
         },
     },
     mounted() {

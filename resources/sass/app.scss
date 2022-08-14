@@ -58,35 +58,35 @@
     .country-box {
         @apply mt-10;
     }
+    .country-box-mt-0 {
+        @apply mt-0;
+    }
     .country-name {
         @apply text-center text-4xl italic underline;
     }
     .generation-box {
-        @apply mt-8 h-[35px] bg-gray-800;
+        @apply mt-8 h-[40px] bg-gray-800;
     }
     .generation-name {
-        @apply leading-[35px] ml-2 text-white;
+        @apply leading-[40px] ml-3 text-white italic;
     }
     .member-box {
         @apply h-[80px] flex mt-3 shadow-sm hover:shadow-md;
     }
     .member-left-box {
-        @apply flex w-1/4;
-    }
-    .member-image-box {
-        @apply w-1/3;
+        @apply flex w-1/2;
     }
     .member-image {
         @apply w-[70px] h-[80px];
     }
     .member-name-box {
-        @apply w-2/3;
+        @apply w-3/4;
     }
     .member-name {
         @apply ml-3 leading-[80px];
     }
     .member-right-box {
-        @apply w-3/4;
+        @apply w-1/2;
     }
     .member-like-box {
         @apply h-[80px];
