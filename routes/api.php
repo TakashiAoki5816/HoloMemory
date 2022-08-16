@@ -12,5 +12,8 @@ Route::middleware(['middleware' => 'api'])->group(function () {
 
     Route::group(['prefix' => 'member', 'as' => 'member.'], function () {
         Route::get('/index', 'Api\MembersController@index')->name('index');
+        Route::get('/jp', 'Api\MembersController@fetchJp')->name('jp');
+        Route::get('/en', 'Api\MembersController@fetchEn')->name('en');
+        Route::get('/id', 'Api\MembersController@fetchId')->name('id');
     });
 });

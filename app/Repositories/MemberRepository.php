@@ -11,8 +11,23 @@ class MemberRepository
         $this->member = $member;
     }
 
-    public function fetchAllMembers()
+    public function fetchAll()
     {
         return $this->member->all();
+    }
+
+    public function fetchJp()
+    {
+        return $this->member->where('country', 'JP')->get();
+    }
+
+    public function fetchEn()
+    {
+        return $this->member->where('country', 'EN')->get();
+    }
+
+    public function fetchId()
+    {
+        return $this->member->where('country', 'ID')->get();
     }
 }

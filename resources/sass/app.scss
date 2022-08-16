@@ -71,7 +71,7 @@
         @apply leading-[40px] ml-3 text-white italic;
     }
     .member-box {
-        @apply h-[80px] flex mt-3 shadow-sm hover:shadow-md;
+        @apply h-[80px] flex mt-3 shadow-sm hover:transform hover:scale-105 hover:shadow-md;
     }
     .member-left-box {
         @apply flex w-1/2;

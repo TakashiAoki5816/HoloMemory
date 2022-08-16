@@ -13,6 +13,21 @@ class MemberService
 
     public function fetchAll()
     {
-        return $this->memberRepository->fetchAllMembers();
+        return $this->memberRepository->fetchAll();
+    }
+
+    public function fetchJp()
+    {
+        return $this->memberRepository->fetchJp();
+    }
+
+    public function fetchEn()
+    {
+        return $this->memberRepository->fetchEn();
+    }
+
+    public function fetchId()
+    {
+        return $this->memberRepository->fetchId();
     }
 }

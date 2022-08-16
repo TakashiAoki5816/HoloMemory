@@ -55,10 +55,17 @@
                 >
                     <div class="member-left-box">
                         <div class="member-image-box">
-                            <img
-                                class="member-image"
-                                :src="member.channel_icon_url"
-                            />
+                            <a
+                                :href="
+                                    'https://www.youtube.com/channel/' +
+                                    member.channel_id
+                                "
+                            >
+                                <img
+                                    class="member-image"
+                                    :src="member.channel_icon_url"
+                                />
+                            </a>
                         </div>
                         <div class="member-name-box">
                             <p class="member-name">{{ member.name }}</p>
@@ -89,10 +96,10 @@ export default {
             selectedGroup: "ALL",
             countryBox: "country-box",
             countryBoxMt0: "country-box-mt-0",
-            all_url: "api/videos",
-            jp_url: "api/videos/jp",
-            en_url: "api/videos/en",
-            id_url: "api/videos/id",
+            all_url: "/api/member/index",
+            jp_url: "/api/member/jp",
+            en_url: "/api/member/en",
+            id_url: "/api/member/id",
         };
     },
     methods: {
@@ -121,7 +128,7 @@ export default {
             }
         },
         fetchMembers(url) {
-            axios.get("/api/member/index").then((res) => {
+            axios.get(url).then((res) => {
                 this.members = res.data;
                 console.log(this.members);
             });
@@ -130,7 +137,6 @@ export default {
             console.log(graduate_id);
             switch (country) {
                 case "JP":
-                    console.log("Hello");
                     switch (graduate_id) {
                         case 0:
                             return "０期生";

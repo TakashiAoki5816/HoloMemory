@@ -17,8 +17,18 @@ class MembersController extends Controller
         return $this->memberService->fetchAll();
     }
 
-    // public function jp()
-    // {
-    //     return $this->memberService->
-    // }
+    public function fetchJp()
+    {
+        return $this->memberService->fetchJp();
+    }
+
+    public function fetchEn()
+    {
+        return $this->memberService->fetchEN();
+    }
+
+    public function fetchId()
+    {
+        return $this->memberService->fetchId();
+    }
 }
