@@ -6,27 +6,50 @@ use App\Models\Member;
 
 class MemberRepository
 {
+    /**
+     * @param Member $member
+     */
     public function __construct(Member $member)
     {
         $this->member = $member;
     }
 
-    public function fetchAll()
+    /**
+     * メンバー一覧取得
+     *
+     * @return Collection
+     */
+    public function fetchAll(): Collection
     {
         return $this->member->all();
     }
 
-    public function fetchJp()
+    /**
+     * JPメンバー取得
+     *
+     * @return Collection
+     */
+    public function fetchJp(): Collection
     {
         return $this->member->where('country', 'JP')->get();
     }
 
-    public function fetchEn()
+    /**
+     * ENメンバー取得
+     *
+     * @return Collection
+     */
+    public function fetchEn(): Collection
     {
         return $this->member->where('country', 'EN')->get();
     }
 
-    public function fetchId()
+    /**
+     * IDメンバー取得
+     *
+     * @return Collection
+     */
+    public function fetchId(): Collection
     {
         return $this->member->where('country', 'ID')->get();
     }

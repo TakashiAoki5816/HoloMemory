@@ -100,6 +100,7 @@ export default {
             jp_url: "/api/member/jp",
             en_url: "/api/member/en",
             id_url: "/api/member/id",
+            error: "",
         };
     },
     methods: {
@@ -128,13 +129,14 @@ export default {
             }
         },
         fetchMembers(url) {
-            axios.get(url).then((res) => {
-                this.members = res.data;
-                console.log(this.members);
-            });
+            axios
+                .get(url)
+                .then((res) => {
+                    this.members = res.data;
+                })
+                .catch((e) => (this.error = e));
         },
         generationName(country, graduate_id) {
-            console.log(graduate_id);
             switch (country) {
                 case "JP":
                     switch (graduate_id) {
@@ -175,7 +177,7 @@ export default {
                         case 2:
                             return "2期生";
                         case 3:
-                            return "３期生";
+                            return "3期生";
                         default:
                             return "ID 該当なし";
                     }

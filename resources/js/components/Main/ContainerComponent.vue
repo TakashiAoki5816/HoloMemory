@@ -17,10 +17,16 @@
                     </option>
                 </select>
             </div>
-            <div class="notification is-danger">
-                <strong class="mt-5 font-bold text-red-600"></strong>
+            <div v-if="message" class="notification mt-7">
+                <strong class="font-bold text-gray-500">{{ message }}</strong>
+            </div>
+            <div v-if="error_message" class="notification is-danger mt-7">
+                <strong class="font-bold text-red-600">{{
+                    error_message
+                }}</strong>
             </div>
             <div class="request-box">
+                f
                 <form v-on:submit.prevent="confirmRequest">
                     <button class="request-button" type="submit">
                         最新の配信情報を取得
@@ -129,6 +135,8 @@ export default {
             id_url: "api/videos/id",
             empty_message: "直近の配信予定はございません。",
             undefind_group_message: "存在しないグループです。",
+            message: "",
+            error_message: "",
         };
     },
     methods: {
@@ -169,9 +177,17 @@ export default {
             }
         },
         fetchLatestVideos() {
-            axios.get("/api/videos/create").then(() => {
-                this.fetchGroupVideos();
-            });
+            axios
+                .get("/api/videos/create")
+                .then(() => {
+                    this.fetchGroupVideos();
+                    this.message = "配信情報を取得しました。";
+                })
+                .catch(
+                    (e) =>
+                        (this.error_message =
+                            "配信情報取得に失敗しました。　" + e)
+                );
         },
         fetchGroupVideos() {
             switch (this.selectedGroup) {
