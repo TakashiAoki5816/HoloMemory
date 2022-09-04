@@ -5,8 +5,7 @@
                 <select
                     v-if="groups.length > 0"
                     class="select-group"
-                    v-model="selectedGroup"
-                    @change="fetchGroup"
+                    @change="changeGroup"
                 >
                     <option value="ALL">全て</option>
                     <option
@@ -18,11 +17,17 @@
                     </option>
                 </select>
             </div>
-            <div class="notification is-danger">
-                <strong class="mt-5 font-bold text-red-600"></strong>
+            <div v-if="message" class="notification mt-7">
+                <strong class="font-bold text-gray-500">{{ message }}</strong>
+            </div>
+            <div v-if="error_message" class="notification is-danger mt-7">
+                <strong class="font-bold text-red-600">{{
+                    error_message
+                }}</strong>
             </div>
             <div class="request-box">
-                <form v-on:submit.prevent="submit">
+                f
+                <form v-on:submit.prevent="confirmRequest">
                     <button class="request-button" type="submit">
                         最新の配信情報を取得
                     </button>
@@ -121,7 +126,7 @@ export default {
     data: function () {
         return {
             groups: [],
-            videos: ["1"],
+            videos: [1],
             lessons: [],
             selectedGroup: "ALL",
             all_url: "api/videos",
@@ -130,66 +135,82 @@ export default {
             id_url: "api/videos/id",
             empty_message: "直近の配信予定はございません。",
             undefind_group_message: "存在しないグループです。",
+            message: "",
+            error_message: "",
         };
     },
     methods: {
-        getGroups() {
+        fetchGroups() {
             axios.get("api/groups").then((res) => {
                 this.groups = res.data;
             });
         },
-        fetchGroup() {
-            switch (this.selectedGroup) {
+        changeGroup(selectedGroup) {
+            this.selectedGroup = selectedGroup.target.value;
+            switch (selectedGroup.target.value) {
                 case "ALL":
-                    this.getVideos(this.all_url);
+                    this.fetchVideos(this.all_url);
                     break;
                 case "JP":
-                    this.getVideos(this.jp_url);
+                    this.fetchVideos(this.jp_url);
                     break;
                 case "EN":
-                    this.getVideos(this.en_url);
+                    this.fetchVideos(this.en_url);
                     break;
                 case "ID":
-                    this.getVideos(this.id_url);
+                    this.fetchVideos(this.id_url);
                     break;
                 default:
                     "存在しないグループです。";
             }
         },
-        getGroupVideos() {
-            switch (this.selectedGroup) {
-                case "ALL":
-                    this.getVideos(this.all_url);
-                    break;
-                case "JP":
-                    this.getVideos(this.jp_url);
-                    break;
-                case "EN":
-                    this.getVideos(this.en_url);
-                    break;
-                case "ID":
-                    this.getVideos(this.id_url);
-                    break;
-                default:
-                    return this.undefind_group_message;
-            }
-        },
-        getVideos(url) {
+        fetchVideos(url) {
             axios.get(url).then((res) => {
                 console.log(res.data);
                 this.videos = res.data;
                 this.lessons = res.data;
             });
         },
-        submit() {
-            axios.get("/api/videos/create").then(() => {
-                this.getGroupVideos();
-            });
+        confirmRequest() {
+            if (confirm("最新の配信情報を取得しますか？")) {
+                this.fetchLatestVideos();
+            }
+        },
+        fetchLatestVideos() {
+            axios
+                .get("/api/videos/create")
+                .then(() => {
+                    this.fetchGroupVideos();
+                    this.message = "配信情報を取得しました。";
+                })
+                .catch(
+                    (e) =>
+                        (this.error_message =
+                            "配信情報取得に失敗しました。　" + e)
+                );
+        },
+        fetchGroupVideos() {
+            switch (this.selectedGroup) {
+                case "ALL":
+                    this.fetchVideos(this.all_url);
+                    break;
+                case "JP":
+                    this.fetchVideos(this.jp_url);
+                    break;
+                case "EN":
+                    this.fetchVideos(this.en_url);
+                    break;
+                case "ID":
+                    this.fetchVideos(this.id_url);
+                    break;
+                default:
+                    return this.undefind_group_message;
+            }
         },
     },
     mounted() {
-        this.getGroups();
-        this.getVideos(this.all_url);
+        this.fetchGroups();
+        this.fetchVideos(this.all_url);
     },
 };
 </script>

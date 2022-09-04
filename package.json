@@ -30,6 +30,11 @@
         "webpack-cli": "^4.5.0"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.1.2",
+        "@fortawesome/free-brands-svg-icons": "^6.1.2",
+        "@fortawesome/free-regular-svg-icons": "^6.1.2",
+        "@fortawesome/free-solid-svg-icons": "^6.1.2",
+        "@fortawesome/vue-fontawesome": "^3.0.0-5",
         "sass-loader": "^12.4.0",
         "vue-router": "^4.0.12",
         "vue3-burger-menu": "^1.1.1",

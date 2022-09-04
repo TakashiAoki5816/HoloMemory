@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -38,9 +37,18 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function logout()
+    //ログイン後の遷移先を元いたページに設定
+    protected function showLoginForm()
     {
-        Auth::logout();
-        return redirect('/');
+        if (!session()->has('url.intended')) {
+            session(['url.intended' => url()->previous()]);
+        }
+        return view('auth.login');
+    }
+
+    //ログアウト後の遷移先を元のページに設定
+    protected function loggedOut()
+    {
+        return back();
     }
 }
