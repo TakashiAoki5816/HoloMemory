@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Member;
+use Illuminate\Database\Eloquent\Collection;
 
 class MemberRepository
 {

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\MemberRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 class MemberService
 {
