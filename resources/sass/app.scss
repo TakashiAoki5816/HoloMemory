@@ -44,7 +44,7 @@
         @apply h-[60px] bg-slate-900 mt-7;
     }
     .lesson {
-        @apply w-[330px] mt-7 mr-10 border-2 border-gray-200;
+        @apply w-[330px] mt-7 mr-10 border-2 border-gray-200 hover:scale-105;
     }
     .lesson-header {
         @apply h-[40px] flex items-center justify-between;
@@ -54,6 +54,48 @@
     }
     .lesson-channel-icon {
         @apply w-[60px] block m-auto;
+    }
+    .country-box {
+        @apply mt-10;
+    }
+    .country-box-mt-0 {
+        @apply mt-0;
+    }
+    .country-name {
+        @apply text-center text-4xl italic underline;
+    }
+    .generation-box {
+        @apply mt-8 h-[40px] bg-gray-800;
+    }
+    .generation-name {
+        @apply leading-[40px] ml-3 text-white italic;
+    }
+    .member-box {
+        @apply h-[80px] flex mt-3 shadow-sm hover:transform hover:scale-105 hover:shadow-md;
+    }
+    .member-left-box {
+        @apply flex w-1/2;
+    }
+    .member-image {
+        @apply w-[70px] h-[80px];
+    }
+    .member-name-box {
+        @apply w-3/4;
+    }
+    .member-name {
+        @apply ml-3 leading-[80px];
+    }
+    .member-right-box {
+        @apply w-1/2;
+    }
+    .member-like-box {
+        @apply h-[80px];
+    }
+    .member-like-button {
+        @apply h-[80px] text-right leading-[80px];
+    }
+    .member-like-icon {
+        @apply h-[20px] w-[30px] mr-2 text-amber-400 cursor-pointer;
     }
     .error-image {
         @apply w-[300px] h-[300px] m-auto;

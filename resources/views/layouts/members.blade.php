@@ -19,8 +19,7 @@
     <div id="app">
         <div class="w-full">
             <header-component :csrf="{{ json_encode(csrf_token()) }}"></header-component>
-            <container-component>
-            </container-component>
+            <members-component></members-component>
         </div>
     </div>
 </body>
