@@ -13,6 +13,6 @@ class MainController extends Controller
      */
     public function main(): View
     {
-        return view('layouts.app');
+        return view('layouts.main');
     }
 }
