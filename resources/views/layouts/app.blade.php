@@ -18,7 +18,7 @@
 <body>
     <div id="app">
         <div class="w-full">
-            <header-component :csrf="{{ json_encode(csrf_token()) }}"></header-component>
+            @include('layouts.header')
             @yield('content')
         </div>
     </div>
