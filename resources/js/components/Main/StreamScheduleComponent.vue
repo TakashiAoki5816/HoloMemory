@@ -26,7 +26,6 @@
                 }}</strong>
             </div>
             <div class="request-box">
-                f
                 <form v-on:submit.prevent="confirmRequest">
                     <button class="request-button" type="submit">
                         最新の配信情報を取得
