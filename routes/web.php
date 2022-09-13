@@ -6,7 +6,7 @@ Route::get('/', 'MainController@main')->name('root');
 
 //**********************************
 // ログイン処理
-//**********************************/
+//**********************************
 Auth::routes();
 Route::get('/user', function (Request $request) {
     $user = $request->user();
@@ -15,7 +15,7 @@ Route::get('/user', function (Request $request) {
 
 //**********************************
 // メンバー
-//**********************************/
+//**********************************
 Route::group(['prefix' => 'member', 'as' => 'member.'], function () {
     Route::get('/index', 'MembersController@index')->name('index');
 });
