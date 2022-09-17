@@ -4,12 +4,12 @@
             <select
                 v-if="groups.length > 0"
                 class="select-group"
-                @change="changeGroup"
+                @change="fetchMembersAfterChangeGroup"
             >
                 <option value="ALL">全て</option>
                 <option
                     v-for="group in groups"
-                    :key="group"
+                    :key="group.id"
                     :value="group.name"
                 >
                     {{ group.name }}
@@ -17,7 +17,8 @@
             </select>
         </div>
         <div class="members-container">
-            <div v-for="(member, index) in members" :key="index">
+            <div v-for="(member, index) in members" :key="member.id">
+                <!-- 国籍表示 -->
                 <div
                     :class="[index === 0 ? countryBoxMt0 : countryBox]"
                     v-if="
@@ -27,6 +28,7 @@
                 >
                     <h1 class="country-name">{{ member.country }}</h1>
                 </div>
+                <!-- グループ名表示 -->
                 <div
                     class="generation-box"
                     v-if="
@@ -37,7 +39,7 @@
                     <div class="generation-line">
                         <h2 class="generation-name">
                             {{
-                                generationName(
+                                getGenerationName(
                                     member.country,
                                     member.graduate_id
                                 )
@@ -45,6 +47,7 @@
                         </h2>
                     </div>
                 </div>
+                <!-- メンバー表示 -->
                 <div
                     class="member-box"
                     v-if="
@@ -103,13 +106,37 @@ export default {
             error: "",
         };
     },
+    mounted() {
+        this.fetchAllGroups();
+        this.fetchMembers(this.all_url);
+    },
     methods: {
-        fetchGroups() {
+        /**
+         * 全てのグループを取得（2022/09/10現在 JP, EN, ID）
+         * @return {void}
+         */
+        fetchAllGroups() {
             axios.get("/api/groups").then((res) => {
                 this.groups = res.data;
             });
         },
-        changeGroup(selectedGroup) {
+        /**
+         * メンバーを取得
+         * @param {string} url
+         * @return {void}
+         */
+        fetchMembers(url) {
+            axios
+                .get(url)
+                .then((res) => {
+                    this.members = res.data;
+                })
+                .catch((e) => (this.error = e));
+        },
+        /**
+         * グループ変更後のメンバーを取得
+         */
+        fetchMembersAfterChangeGroup(selectedGroup) {
             this.selectedGroup = selectedGroup.target.value;
             switch (selectedGroup.target.value) {
                 case "ALL":
@@ -128,18 +155,16 @@ export default {
                     "存在しないグループです。";
             }
         },
-        fetchMembers(url) {
-            axios
-                .get(url)
-                .then((res) => {
-                    this.members = res.data;
-                })
-                .catch((e) => (this.error = e));
-        },
-        generationName(country, graduate_id) {
+        /**
+         * 期生名を取得
+         * @param {string} country
+         * @param {number} graduateId
+         * @return {void｜string}
+         */
+        getGenerationName(country, graduateId) {
             switch (country) {
                 case "JP":
-                    switch (graduate_id) {
+                    switch (graduateId) {
                         case 0:
                             return "０期生";
                         case 1:
@@ -160,7 +185,7 @@ export default {
                             return "JP 該当なし";
                     }
                 case "EN":
-                    switch (graduate_id) {
+                    switch (graduateId) {
                         case 1:
                             return "Myth";
                         case 2:
@@ -171,7 +196,7 @@ export default {
                             return "EN 該当なし";
                     }
                 case "ID":
-                    switch (graduate_id) {
+                    switch (graduateId) {
                         case 1:
                             return "1期生";
                         case 2:
@@ -185,10 +210,6 @@ export default {
                     return "該当なし";
             }
         },
-    },
-    mounted() {
-        this.fetchGroups();
-        this.fetchMembers(this.all_url);
     },
 };
 </script>
