@@ -43,6 +43,9 @@
     .date-section {
         @apply h-[60px] bg-slate-900 mt-7;
     }
+    .date-text {
+        @apply text-white text-center leading-[60px];
+    }
     .lesson {
         @apply w-[330px] mt-7 mr-10 border-2 border-gray-200 hover:scale-105;
     }

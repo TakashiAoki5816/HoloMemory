@@ -5,7 +5,7 @@
                 <select
                     v-if="groups.length > 0"
                     class="select-group"
-                    @change="changeGroup"
+                    @change="fetchVideosBySelectedGroup"
                 >
                     <option value="ALL">全て</option>
                     <option
@@ -26,7 +26,7 @@
                 }}</strong>
             </div>
             <div class="request-box">
-                <form v-on:submit.prevent="confirmRequest">
+                <form v-on:submit.prevent="fetchLatestVideos">
                     <button class="request-button" type="submit">
                         最新の配信情報を取得
                     </button>
@@ -35,31 +35,41 @@
         </div>
         <main>
             <div>
-                <div v-if="videos.length">
-                    <div v-for="(video, index) in videos" :key="index">
+                <div v-if="streams.length">
+                    <div
+                        v-for="(stream, index) in streams"
+                        :key="stream.video_id"
+                    >
+                        <!-- 日付表示 -->
                         <div
                             class="date-section"
                             v-if="
                                 index === 0 ||
-                                video.start_date != videos[index - 1].start_date
+                                stream.start_date !=
+                                    streams[index - 1].start_date
                             "
                         >
-                            <h2 class="text-white text-center leading-[60px]">
-                                {{ video.start_date }}
+                            <h2 class="date-text">
+                                {{ stream.start_date }}
                             </h2>
                         </div>
+                        <!-- 配信一覧 -->
                         <ul
                             class="lessons"
                             v-if="
                                 index === 0 ||
-                                video.start_date != videos[index - 1].start_date
+                                stream.start_date !=
+                                    streams[index - 1].start_date
                             "
                         >
-                            <li v-for="(lesson, index) in lessons" :key="index">
+                            <li
+                                v-for="lesson in lessons"
+                                :key="lesson.video_id"
+                            >
                                 <div
                                     class="lesson"
                                     v-if="
-                                        video.start_date === lesson.start_date
+                                        stream.start_date === lesson.start_date
                                     "
                                 >
                                     <div class="lesson-header">
@@ -125,7 +135,7 @@ export default {
     data: function () {
         return {
             groups: [],
-            videos: [1],
+            streams: [1],
             lessons: [],
             selectedGroup: "ALL",
             all_url: "api/videos",
@@ -138,78 +148,96 @@ export default {
             error_message: "",
         };
     },
+    mounted() {
+        this.fetchAllGroups();
+        this.fetchVideosByUrl(this.all_url);
+    },
     methods: {
-        fetchGroups() {
+        /**
+         * 全てのグループを取得（2022/09/10現在 JP, EN, ID）
+         * @return {void}
+         */
+        fetchAllGroups() {
             axios.get("api/groups").then((res) => {
                 this.groups = res.data;
             });
         },
-        changeGroup(selectedGroup) {
-            this.selectedGroup = selectedGroup.target.value;
-            switch (selectedGroup.target.value) {
-                case "ALL":
-                    this.fetchVideos(this.all_url);
-                    break;
-                case "JP":
-                    this.fetchVideos(this.jp_url);
-                    break;
-                case "EN":
-                    this.fetchVideos(this.en_url);
-                    break;
-                case "ID":
-                    this.fetchVideos(this.id_url);
-                    break;
-                default:
-                    "存在しないグループです。";
-            }
-        },
-        fetchVideos(url) {
+        /**
+         * URLに応じた配信情報を取得
+         * @param {string} url
+         * @return {void}
+         */
+        fetchVideosByUrl(url) {
             axios.get(url).then((res) => {
-                console.log(res.data);
-                this.videos = res.data;
+                // 配信動画と日付を区別するために同じ情報を二つの変数に格納（TODO:もしかしたら1つで行ける？）
+                this.streams = res.data;
                 this.lessons = res.data;
             });
         },
-        confirmRequest() {
-            if (confirm("最新の配信情報を取得しますか？")) {
-                this.fetchLatestVideos();
+        /**
+         * 選択されたグループの配信情報を取得
+         * TODO:現状、グループごとにSQLを発行しているが、よくよくは一度に配信情報を全て取得し、Vue側でうまく切り替えたい
+         * @param {int} selectedGroup
+         * @return {void}
+         */
+        fetchVideosBySelectedGroup(selectedGroup) {
+            // 最新の配信情報を取得した際にどのグループを選択しているのかが判るように格納
+            this.selectedGroup = selectedGroup.target.value;
+            switch (selectedGroup.target.value) {
+                case "ALL":
+                    this.fetchVideosByUrl(this.all_url);
+                    break;
+                case "JP":
+                    this.fetchVideosByUrl(this.jp_url);
+                    break;
+                case "EN":
+                    this.fetchVideosByUrl(this.en_url);
+                    break;
+                case "ID":
+                    this.fetchVideosByUrl(this.id_url);
+                    break;
+                default:
+                    alert(this.undefind_group_message);
             }
         },
+        /**
+         * 最新の配信情報取得リクエスト
+         * @return {void}
+         */
         fetchLatestVideos() {
-            axios
-                .get("/api/videos/create")
-                .then(() => {
-                    this.fetchGroupVideos();
-                    this.message = "配信情報を取得しました。";
-                })
-                .catch(
-                    (e) =>
-                        (this.error_message =
-                            "配信情報取得に失敗しました。　" + e)
-                );
+            if (confirm("最新の配信情報を取得しますか？")) {
+                axios
+                    .get("/api/videos/create")
+                    .then(() => {
+                        this.fetchGroupVideos();
+                        this.message = "配信情報を取得しました。";
+                    })
+                    .catch(
+                        (e) =>
+                            (this.error_message =
+                                "配信情報取得に失敗しました。　" + e)
+                    );
+            }
+            return;
         },
         fetchGroupVideos() {
             switch (this.selectedGroup) {
                 case "ALL":
-                    this.fetchVideos(this.all_url);
+                    this.fetchVideosByUrl(this.all_url);
                     break;
                 case "JP":
-                    this.fetchVideos(this.jp_url);
+                    this.fetchVideosByUrl(this.jp_url);
                     break;
                 case "EN":
-                    this.fetchVideos(this.en_url);
+                    this.fetchVideosByUrl(this.en_url);
                     break;
                 case "ID":
-                    this.fetchVideos(this.id_url);
+                    this.fetchVideosByUrl(this.id_url);
                     break;
                 default:
-                    return this.undefind_group_message;
+                    alert(this.undefind_group_message);
             }
         },
-    },
-    mounted() {
-        this.fetchGroups();
-        this.fetchVideos(this.all_url);
     },
 };
 </script>

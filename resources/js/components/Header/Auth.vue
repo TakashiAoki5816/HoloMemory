@@ -44,7 +44,7 @@ export default {
     methods: {
         /**
          * ログインユーザーを取得
-         * @return void
+         * @return {void}
          */
         fetchLoginUser() {
             axios.get("/user").then((res) => {
