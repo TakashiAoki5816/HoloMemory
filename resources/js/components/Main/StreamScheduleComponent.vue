@@ -69,7 +69,9 @@
                                 <div
                                     class="lesson"
                                     v-if="
-                                        stream.start_date === lesson.start_date
+                                        (selectedGroup === 'ALL' ||
+                                            lesson.country === selectedGroup) &&
+                                        lesson.start_date === stream.start_date
                                     "
                                 >
                                     <div class="lesson-header">
@@ -135,7 +137,7 @@ export default {
     data: function () {
         return {
             groups: [],
-            streams: [1],
+            streams: [],
             lessons: [],
             selectedGroup: "ALL",
             all_url: "api/videos",
@@ -148,7 +150,7 @@ export default {
             error_message: "",
         };
     },
-    mounted() {
+    created() {
         this.fetchAllGroups();
         this.fetchVideosByUrl(this.all_url);
     },
@@ -171,6 +173,7 @@ export default {
             axios.get(url).then((res) => {
                 // 配信動画と日付を区別するために同じ情報を二つの変数に格納（TODO:もしかしたら1つで行ける？）
                 this.streams = res.data;
+                console.log(this.streams);
                 this.lessons = res.data;
             });
         },
@@ -183,22 +186,25 @@ export default {
         fetchVideosBySelectedGroup(selectedGroup) {
             // 最新の配信情報を取得した際にどのグループを選択しているのかが判るように格納
             this.selectedGroup = selectedGroup.target.value;
-            switch (selectedGroup.target.value) {
-                case "ALL":
-                    this.fetchVideosByUrl(this.all_url);
-                    break;
-                case "JP":
-                    this.fetchVideosByUrl(this.jp_url);
-                    break;
-                case "EN":
-                    this.fetchVideosByUrl(this.en_url);
-                    break;
-                case "ID":
-                    this.fetchVideosByUrl(this.id_url);
-                    break;
-                default:
-                    alert(this.undefind_group_message);
-            }
+            console.log(this.selectedGroup);
+            console.log(this.streams);
+            // console.log(this.selectedGroup);
+            // switch (selectedGroup.target.value) {
+            //     case "ALL":
+            //         true;
+            //         break;
+            //     case "JP":
+            //         this.fetchVideosByUrl(this.jp_url);
+            //         break;
+            //     case "EN":
+            //         this.fetchVideosByUrl(this.en_url);
+            //         break;
+            //     case "ID":
+            //         this.fetchVideosByUrl(this.id_url);
+            //         break;
+            //     default:
+            //         alert(this.undefind_group_message);
+            // }
         },
         /**
          * 最新の配信情報取得リクエスト
