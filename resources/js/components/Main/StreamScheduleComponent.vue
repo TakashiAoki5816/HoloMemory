@@ -44,9 +44,12 @@
                         <div
                             class="date-section"
                             v-if="
-                                index === 0 ||
-                                stream.start_date !=
-                                    streams[index - 1].start_date
+                                (index === 0 &&
+                                    isUnEmptyFlg(stream.start_date)) ||
+                                (index !== 0 &&
+                                    isUnEmptyFlg(stream.start_date) &&
+                                    stream.start_date !=
+                                        streams[index - 1].start_date)
                             "
                         >
                             <h2 class="date-text">
@@ -139,20 +142,20 @@ export default {
             groups: [],
             streams: [],
             lessons: [],
+            streams_lessons: [],
             selectedGroup: "ALL",
             all_url: "api/videos",
-            jp_url: "api/videos/jp",
-            en_url: "api/videos/en",
-            id_url: "api/videos/id",
             empty_message: "直近の配信予定はございません。",
             undefind_group_message: "存在しないグループです。",
+            unEmptyFlg: true,
             message: "",
             error_message: "",
         };
     },
-    created() {
+    mounted() {
         this.fetchAllGroups();
         this.fetchVideosByUrl(this.all_url);
+        console.log(this.streams);
     },
     methods: {
         /**
@@ -175,6 +178,7 @@ export default {
                 this.streams = res.data;
                 console.log(this.streams);
                 this.lessons = res.data;
+                this.streams_lessons = res.data;
             });
         },
         /**
@@ -186,8 +190,12 @@ export default {
         fetchVideosBySelectedGroup(selectedGroup) {
             // 最新の配信情報を取得した際にどのグループを選択しているのかが判るように格納
             this.selectedGroup = selectedGroup.target.value;
-            console.log(this.selectedGroup);
-            console.log(this.streams);
+
+            // if (selectedGroup !== "ALL") {
+            //     streams.find((stream) => stream.start_date);
+            // }
+
+            // this.isUnEmptyFlg(this.selectedGroup);
             // console.log(this.selectedGroup);
             // switch (selectedGroup.target.value) {
             //     case "ALL":
@@ -215,7 +223,8 @@ export default {
                 axios
                     .get("/api/videos/create")
                     .then(() => {
-                        this.fetchGroupVideos();
+                        // this.fetchGroupVideos();
+                        this.fetchVideosByUrl(this.all_url);
                         this.message = "配信情報を取得しました。";
                     })
                     .catch(
@@ -243,6 +252,30 @@ export default {
                 default:
                     alert(this.undefind_group_message);
             }
+        },
+        isUnEmptyFlg(targetDate) {
+            // console.log(targetDate);
+            // this.streams_lessons.forEach((stream, index) => {
+            //     console.log("aaa");
+            //     console.log(stream.country);
+            //     console.log(this.streams_lessons.pop());
+            //     console.log(index);
+            //     if (
+            //         stream.country === this.selectedGroup &&
+            //         stream.start_date === targetDate
+            //     ) {
+            //         console.log(stream);
+            //         return (this.unEmptyFlg = true);
+            //     }
+            //     if (index === this.streams_lessons.pop()) {
+            //         return (this.unEmptyFlg = false);
+            //     }
+            // });
+            // console.log(this.unEmptyFlg);
+            // // console.log(this.streams_lessons);
+            // console.log("bbb");
+            // console.log(this.streams);
+            return this.unEmptyFlg;
         },
     },
 };

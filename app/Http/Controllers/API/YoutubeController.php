@@ -32,7 +32,7 @@ class YoutubeController extends Controller
     }
 
     /**
-     * 日本グループの配信情報を取得
+     * JPの配信情報を取得
      *
      * @return object Collection
      */
@@ -42,7 +42,7 @@ class YoutubeController extends Controller
     }
 
     /**
-     * 英語グループの配信情報を取得
+     * ENの配信情報を取得
      *
      * @return object Collection
      */
@@ -52,7 +52,7 @@ class YoutubeController extends Controller
     }
 
     /**
-     * インドネシアグループの配信情報を取得
+     * IDの配信情報を取得
      *
      * @return object Collection
      */
