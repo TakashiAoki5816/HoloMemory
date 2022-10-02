@@ -35,6 +35,33 @@ class DailyUpcomingVideos extends Model
     }
 
     /**
+     * 登録されている配信日付を取得
+     *
+     * @return object Collection
+     */
+    public function getScheduleDate($group)
+    {
+        if ($group === 'ALL') {
+            $collection = $this->with('member')->orderBy('scheduled_start_time', 'asc')->get();
+        } else {
+            $collection = $this->with('member')->where('country', $group)->orderBy('scheduled_start_time', 'asc')->get();
+        }
+        $scheduleDates = $collection->pluck('scheduled_start_time')->all();
+
+        $scheduleDateList = [];
+        foreach ($scheduleDates as $scheduleDate) {
+            $dateTime = new DateTime($scheduleDate);
+            $day = $dateTime->format("m/d") . DailyUpcomingVideosConsts::WEEK[$dateTime->format("w")];
+
+            $scheduleDateList[] = $day;
+        }
+
+        $scheduleDateList = array_unique($scheduleDateList);
+        $scheduleDateList = array_values($scheduleDateList);
+        return $scheduleDateList;
+    }
+
+    /**
      * 日本グループの配信動画を取得
      *
      * @return object Collection

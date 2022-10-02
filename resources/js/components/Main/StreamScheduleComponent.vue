@@ -35,96 +35,87 @@
         </div>
         <main>
             <div>
-                <div v-if="streams.length">
+                <div v-if="lessons.length">
                     <div
-                        v-for="(stream, index) in streams"
-                        :key="stream.video_id"
+                        v-for="(scheduleDate, index) in scheduleDates"
+                        :key="index"
                     >
                         <!-- 日付表示 -->
-                        <div
-                            class="date-section"
-                            v-if="
-                                (index === 0 &&
-                                    isUnEmptyFlg(stream.start_date)) ||
-                                (index !== 0 &&
-                                    isUnEmptyFlg(stream.start_date) &&
-                                    stream.start_date !=
-                                        streams[index - 1].start_date)
-                            "
-                        >
+                        <div class="date-section">
                             <h2 class="date-text">
-                                {{ stream.start_date }}
+                                {{ scheduleDate }}
                             </h2>
                         </div>
                         <!-- 配信一覧 -->
-                        <ul
-                            class="lessons"
-                            v-if="
-                                index === 0 ||
-                                stream.start_date !=
-                                    streams[index - 1].start_date
-                            "
+                        <div
+                            v-for="(lesson, index) in lessons"
+                            :key="lesson.video_id"
                         >
-                            <li
-                                v-for="lesson in lessons"
-                                :key="lesson.video_id"
+                            <ul
+                                class="lessons"
+                                v-if="
+                                    index === 0 ||
+                                    lesson.start_date !=
+                                        lessons[index - 1].start_date
+                                "
                             >
-                                <div
-                                    class="lesson"
-                                    v-if="
-                                        (selectedGroup === 'ALL' ||
-                                            lesson.country === selectedGroup) &&
-                                        lesson.start_date === stream.start_date
-                                    "
-                                >
-                                    <div class="lesson-header">
-                                        <div>{{ lesson.start_time }}</div>
-                                        <div>{{ lesson.member.name }}</div>
-                                    </div>
-                                    <div class="lesson-image">
-                                        <a
-                                            v-bind:href="
-                                                'https://www.youtube.com/watch?v=' +
-                                                lesson.video_id
-                                            "
-                                            target="_blank"
-                                            rel="noopener
+                                <li>
+                                    <div
+                                        class="lesson"
+                                        v-if="
+                                            selectedGroup === 'ALL' ||
+                                            lesson.country === selectedGroup
+                                        "
+                                    >
+                                        <div class="lesson-header">
+                                            <div>{{ lesson.start_time }}</div>
+                                            <div>{{ lesson.member.name }}</div>
+                                        </div>
+                                        <div class="lesson-image">
+                                            <a
+                                                v-bind:href="
+                                                    'https://www.youtube.com/watch?v=' +
+                                                    lesson.video_id
+                                                "
+                                                target="_blank"
+                                                rel="noopener
                                 noreferrer"
-                                        >
-                                            <img
-                                                v-bind:src="
-                                                    lesson.thumbnails_url
+                                            >
+                                                <img
+                                                    v-bind:src="
+                                                        lesson.thumbnails_url
+                                                    "
+                                                />
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a
+                                                class="lesson-channel-icon"
+                                                v-bind:href="
+                                                    'https://www.youtube.com/channel/' +
+                                                    lesson.member.channel_id
                                                 "
-                                            />
-                                        </a>
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img
+                                                    v-bind:src="
+                                                        lesson.member
+                                                            .channel_icon_url
+                                                    "
+                                                    style="
+                                                        border-radius: 50%;
+                                                        border: 2px#eeac5e solid;
+                                                    "
+                                                    width="60"
+                                                    height="60"
+                                                />
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <a
-                                            class="lesson-channel-icon"
-                                            v-bind:href="
-                                                'https://www.youtube.com/channel/' +
-                                                lesson.member.channel_id
-                                            "
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <img
-                                                v-bind:src="
-                                                    lesson.member
-                                                        .channel_icon_url
-                                                "
-                                                style="
-                                                    border-radius: 50%;
-                                                    border: 2px#eeac5e solid;
-                                                "
-                                                width="60"
-                                                height="60"
-                                            />
-                                        </a>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div v-else class="text-center font-bold mt-5">
@@ -142,7 +133,7 @@ export default {
             groups: [],
             streams: [],
             lessons: [],
-            streams_lessons: [],
+            scheduleDates: [],
             selectedGroup: "ALL",
             all_url: "api/videos",
             empty_message: "直近の配信予定はございません。",
@@ -155,6 +146,7 @@ export default {
     mounted() {
         this.fetchAllGroups();
         this.fetchVideosByUrl(this.all_url);
+        this.fetchScheduleDate(this.selectedGroup);
         console.log(this.streams);
     },
     methods: {
@@ -178,7 +170,6 @@ export default {
                 this.streams = res.data;
                 console.log(this.streams);
                 this.lessons = res.data;
-                this.streams_lessons = res.data;
             });
         },
         /**
@@ -190,6 +181,7 @@ export default {
         fetchVideosBySelectedGroup(selectedGroup) {
             // 最新の配信情報を取得した際にどのグループを選択しているのかが判るように格納
             this.selectedGroup = selectedGroup.target.value;
+            this.fetchScheduleDate(this.selectedGroup);
 
             // if (selectedGroup !== "ALL") {
             //     streams.find((stream) => stream.start_date);
@@ -213,6 +205,15 @@ export default {
             //     default:
             //         alert(this.undefind_group_message);
             // }
+        },
+        fetchScheduleDate(selectedGroup) {
+            axios
+                .get("api/videos/date/index?group=" + selectedGroup)
+                .then((res) => {
+                    // 配信動画と日付を区別するために同じ情報を二つの変数に格納（TODO:もしかしたら1つで行ける？）
+                    this.scheduleDates = res.data;
+                    console.log(this.scheduleDates);
+                });
         },
         /**
          * 最新の配信情報取得リクエスト

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\DailyUpcomingVideos;
+use App\Http\Controllers\Controller;
 use App\Services\Youtube\SearchListService;
+use Illuminate\Http\Request;
 
 class YoutubeController extends Controller
 {
@@ -29,6 +30,17 @@ class YoutubeController extends Controller
     public function index(): object
     {
         return $this->dailyUpcomingVideos->getVideos();
+    }
+
+    /**
+     * 配信情報一覧取得
+     *
+     * @return object Collection
+     */
+    public function date_index(Request $request)
+    {
+        $group = $request->query('group');
+        return $this->dailyUpcomingVideos->getScheduleDate($group);
     }
 
     /**
