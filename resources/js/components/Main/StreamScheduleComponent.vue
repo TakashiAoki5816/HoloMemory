@@ -35,7 +35,7 @@
         </div>
         <main>
             <div>
-                <div v-if="lessons.length">
+                <div v-if="Object.keys(streams).length">
                     <div
                         v-for="(scheduleDate, index) in scheduleDates"
                         :key="index"
@@ -47,75 +47,65 @@
                             </h2>
                         </div>
                         <!-- 配信一覧 -->
-                        <div
-                            v-for="(lesson, index) in lessons"
-                            :key="lesson.video_id"
-                        >
-                            <ul
-                                class="lessons"
-                                v-if="
-                                    index === 0 ||
-                                    lesson.start_date !=
-                                        lessons[index - 1].start_date
-                                "
+
+                        <ul class="lessons">
+                            <li
+                                v-for="stream in streams[scheduleDate]"
+                                :key="stream.video_id"
                             >
-                                <li>
-                                    <div
-                                        class="lesson"
-                                        v-if="
-                                            selectedGroup === 'ALL' ||
-                                            lesson.country === selectedGroup
-                                        "
-                                    >
-                                        <div class="lesson-header">
-                                            <div>{{ lesson.start_time }}</div>
-                                            <div>{{ lesson.member.name }}</div>
-                                        </div>
-                                        <div class="lesson-image">
-                                            <a
-                                                v-bind:href="
-                                                    'https://www.youtube.com/watch?v=' +
-                                                    lesson.video_id
-                                                "
-                                                target="_blank"
-                                                rel="noopener
-                                noreferrer"
-                                            >
-                                                <img
-                                                    v-bind:src="
-                                                        lesson.thumbnails_url
-                                                    "
-                                                />
-                                            </a>
+                                <div class="lesson">
+                                    <div class="lesson-header">
+                                        <div>
+                                            {{ stream.start_time }}
                                         </div>
                                         <div>
-                                            <a
-                                                class="lesson-channel-icon"
-                                                v-bind:href="
-                                                    'https://www.youtube.com/channel/' +
-                                                    lesson.member.channel_id
-                                                "
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                <img
-                                                    v-bind:src="
-                                                        lesson.member
-                                                            .channel_icon_url
-                                                    "
-                                                    style="
-                                                        border-radius: 50%;
-                                                        border: 2px#eeac5e solid;
-                                                    "
-                                                    width="60"
-                                                    height="60"
-                                                />
-                                            </a>
+                                            {{ stream.member.name }}
                                         </div>
                                     </div>
-                                </li>
-                            </ul>
-                        </div>
+                                    <div class="lesson-image">
+                                        <a
+                                            v-bind:href="
+                                                'https://www.youtube.com/watch?v=' +
+                                                stream.video_id
+                                            "
+                                            target="_blank"
+                                            rel="noopener
+                                noreferrer"
+                                        >
+                                            <img
+                                                v-bind:src="
+                                                    stream.thumbnails_url
+                                                "
+                                            />
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a
+                                            class="lesson-channel-icon"
+                                            v-bind:href="
+                                                'https://www.youtube.com/channel/' +
+                                                stream.member.channel_id
+                                            "
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            <img
+                                                v-bind:src="
+                                                    stream.member
+                                                        .channel_icon_url
+                                                "
+                                                style="
+                                                    border-radius: 50%;
+                                                    border: 2px#eeac5e solid;
+                                                "
+                                                width="60"
+                                                height="60"
+                                            />
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div v-else class="text-center font-bold mt-5">
@@ -131,7 +121,7 @@ export default {
     data: function () {
         return {
             groups: [],
-            streams: [],
+            streams: {},
             lessons: [],
             scheduleDates: [],
             selectedGroup: "ALL",
@@ -145,9 +135,8 @@ export default {
     },
     mounted() {
         this.fetchAllGroups();
-        this.fetchVideosByUrl(this.all_url);
         this.fetchScheduleDate(this.selectedGroup);
-        console.log(this.streams);
+        this.fetchVideosByUrl(this.all_url, this.selectedGroup);
     },
     methods: {
         /**
@@ -164,17 +153,14 @@ export default {
          * @param {string} url
          * @return {void}
          */
-        fetchVideosByUrl(url) {
-            axios.get(url).then((res) => {
-                // 配信動画と日付を区別するために同じ情報を二つの変数に格納（TODO:もしかしたら1つで行ける？）
+        fetchVideosByUrl(url, selectedGroup) {
+            axios.get(url + "?group=" + selectedGroup).then((res) => {
                 this.streams = res.data;
                 console.log(this.streams);
-                this.lessons = res.data;
             });
         },
         /**
          * 選択されたグループの配信情報を取得
-         * TODO:現状、グループごとにSQLを発行しているが、よくよくは一度に配信情報を全て取得し、Vue側でうまく切り替えたい
          * @param {int} selectedGroup
          * @return {void}
          */
@@ -182,35 +168,12 @@ export default {
             // 最新の配信情報を取得した際にどのグループを選択しているのかが判るように格納
             this.selectedGroup = selectedGroup.target.value;
             this.fetchScheduleDate(this.selectedGroup);
-
-            // if (selectedGroup !== "ALL") {
-            //     streams.find((stream) => stream.start_date);
-            // }
-
-            // this.isUnEmptyFlg(this.selectedGroup);
-            // console.log(this.selectedGroup);
-            // switch (selectedGroup.target.value) {
-            //     case "ALL":
-            //         true;
-            //         break;
-            //     case "JP":
-            //         this.fetchVideosByUrl(this.jp_url);
-            //         break;
-            //     case "EN":
-            //         this.fetchVideosByUrl(this.en_url);
-            //         break;
-            //     case "ID":
-            //         this.fetchVideosByUrl(this.id_url);
-            //         break;
-            //     default:
-            //         alert(this.undefind_group_message);
-            // }
+            this.fetchVideosByUrl(this.all_url, this.selectedGroup);
         },
         fetchScheduleDate(selectedGroup) {
             axios
                 .get("api/videos/date/index?group=" + selectedGroup)
                 .then((res) => {
-                    // 配信動画と日付を区別するために同じ情報を二つの変数に格納（TODO:もしかしたら1つで行ける？）
                     this.scheduleDates = res.data;
                     console.log(this.scheduleDates);
                 });
@@ -224,8 +187,8 @@ export default {
                 axios
                     .get("/api/videos/create")
                     .then(() => {
-                        // this.fetchGroupVideos();
-                        this.fetchVideosByUrl(this.all_url);
+                        this.fetchScheduleDate(this.selectedGroup);
+                        this.fetchVideosByUrl(this.all_url, this.selectedGroup);
                         this.message = "配信情報を取得しました。";
                     })
                     .catch(
@@ -235,48 +198,6 @@ export default {
                     );
             }
             return;
-        },
-        fetchGroupVideos() {
-            switch (this.selectedGroup) {
-                case "ALL":
-                    this.fetchVideosByUrl(this.all_url);
-                    break;
-                case "JP":
-                    this.fetchVideosByUrl(this.jp_url);
-                    break;
-                case "EN":
-                    this.fetchVideosByUrl(this.en_url);
-                    break;
-                case "ID":
-                    this.fetchVideosByUrl(this.id_url);
-                    break;
-                default:
-                    alert(this.undefind_group_message);
-            }
-        },
-        isUnEmptyFlg(targetDate) {
-            // console.log(targetDate);
-            // this.streams_lessons.forEach((stream, index) => {
-            //     console.log("aaa");
-            //     console.log(stream.country);
-            //     console.log(this.streams_lessons.pop());
-            //     console.log(index);
-            //     if (
-            //         stream.country === this.selectedGroup &&
-            //         stream.start_date === targetDate
-            //     ) {
-            //         console.log(stream);
-            //         return (this.unEmptyFlg = true);
-            //     }
-            //     if (index === this.streams_lessons.pop()) {
-            //         return (this.unEmptyFlg = false);
-            //     }
-            // });
-            // console.log(this.unEmptyFlg);
-            // // console.log(this.streams_lessons);
-            // console.log("bbb");
-            // console.log(this.streams);
-            return this.unEmptyFlg;
         },
     },
 };

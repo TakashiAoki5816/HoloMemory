@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\Member;
-use App\Consts\DailyUpcomingVideosConsts;
 use DateTime;
+use App\Models\Member;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use App\Consts\DailyUpcomingVideosConsts;
 
 class DailyUpcomingVideos extends Model
 {
@@ -27,25 +28,33 @@ class DailyUpcomingVideos extends Model
     /**
      * 登録されている配信予定動画を全て取得
      *
-     * @return object Collection
+     * @param string $group
+     * @return Collection $grouped
      */
-    public function getVideos(): object
+    public function getVideos(string $group): Collection
     {
-        return $this->with('member')->orderBy('scheduled_start_time', 'asc')->get();
+        $collection = $this->getCollectionByGroupId($group);
+
+        $multiplied = $collection->map(function ($stream, $key) {
+            $dateTime = new DateTime($stream->scheduled_start_time);
+            $day = $dateTime->format("m/d") . DailyUpcomingVideosConsts::WEEK[$dateTime->format("w")];
+            $stream->start_date = $day;
+            return $stream;
+        });
+        $grouped = $multiplied->groupBy('start_date');
+
+        return $grouped;
     }
 
     /**
      * 登録されている配信日付を取得
      *
-     * @return object Collection
+     * @param string $group
+     * @return array $scheduleDateList
      */
-    public function getScheduleDate($group)
+    public function getScheduleDate($group): array
     {
-        if ($group === 'ALL') {
-            $collection = $this->with('member')->orderBy('scheduled_start_time', 'asc')->get();
-        } else {
-            $collection = $this->with('member')->where('country', $group)->orderBy('scheduled_start_time', 'asc')->get();
-        }
+        $collection = $this->getCollectionByGroupId($group);
         $scheduleDates = $collection->pluck('scheduled_start_time')->all();
 
         $scheduleDateList = [];
@@ -59,6 +68,25 @@ class DailyUpcomingVideos extends Model
         $scheduleDateList = array_unique($scheduleDateList);
         $scheduleDateList = array_values($scheduleDateList);
         return $scheduleDateList;
+    }
+
+    /**
+     * グループIDに応じたCollectionを取得
+     *
+     * @param string $group
+     * @return Collection
+     */
+    public function getCollectionByGroupId($group): Collection
+    {
+        if ($group === 'ALL') {
+            $collection = $this->with('member')->orderBy('scheduled_start_time', 'asc')->get();
+
+            return $collection;
+        }
+
+        $collection = $this->with('member')->where('country', $group)->orderBy('scheduled_start_time', 'asc')->get();
+
+        return $collection;
     }
 
     /**
