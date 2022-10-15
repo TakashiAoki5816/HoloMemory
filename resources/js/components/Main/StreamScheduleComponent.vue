@@ -128,7 +128,6 @@ export default {
             all_url: "api/videos",
             empty_message: "直近の配信予定はございません。",
             undefind_group_message: "存在しないグループです。",
-            unEmptyFlg: true,
             message: "",
             error_message: "",
         };
@@ -148,6 +147,21 @@ export default {
                 this.groups = res.data;
             });
         },
+
+        /**
+         * 対象のグループの配信日付を取得する
+         * @param {string}
+         * @return {void}
+         */
+        fetchScheduleDate(selectedGroup) {
+            axios
+                .get("api/videos/date/index?group=" + selectedGroup)
+                .then((res) => {
+                    this.scheduleDates = res.data;
+                    console.log(this.scheduleDates);
+                });
+        },
+
         /**
          * URLに応じた配信情報を取得
          * @param {string} url
@@ -159,6 +173,7 @@ export default {
                 console.log(this.streams);
             });
         },
+
         /**
          * 選択されたグループの配信情報を取得
          * @param {int} selectedGroup
@@ -170,14 +185,7 @@ export default {
             this.fetchScheduleDate(this.selectedGroup);
             this.fetchVideosByUrl(this.all_url, this.selectedGroup);
         },
-        fetchScheduleDate(selectedGroup) {
-            axios
-                .get("api/videos/date/index?group=" + selectedGroup)
-                .then((res) => {
-                    this.scheduleDates = res.data;
-                    console.log(this.scheduleDates);
-                });
-        },
+
         /**
          * 最新の配信情報取得リクエスト
          * @return {void}

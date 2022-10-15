@@ -26,7 +26,7 @@ class YoutubeController extends Controller
     /**
      * 配信情報一覧取得
      *
-     * @return object Collection
+     * @return Collection
      */
     public function index(Request $request): Collection
     {
@@ -37,42 +37,12 @@ class YoutubeController extends Controller
     /**
      * 配信情報一覧取得
      *
-     * @return object Collection
+     * @return array
      */
-    public function date_index(Request $request)
+    public function date_index(Request $request): array
     {
         $group = $request->query('group');
         return $this->dailyUpcomingVideos->getScheduleDate($group);
-    }
-
-    /**
-     * JPの配信情報を取得
-     *
-     * @return object Collection
-     */
-    public function jp(): object
-    {
-        return $this->dailyUpcomingVideos->getJpVideos();
-    }
-
-    /**
-     * ENの配信情報を取得
-     *
-     * @return object Collection
-     */
-    public function en(): object
-    {
-        return $this->dailyUpcomingVideos->getEnVideos();
-    }
-
-    /**
-     * IDの配信情報を取得
-     *
-     * @return object Collection
-     */
-    public function id(): object
-    {
-        return $this->dailyUpcomingVideos->getIdVideos();
     }
 
     /**

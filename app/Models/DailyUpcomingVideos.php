@@ -90,36 +90,6 @@ class DailyUpcomingVideos extends Model
     }
 
     /**
-     * 日本グループの配信動画を取得
-     *
-     * @return object Collection
-     */
-    public function getJpVideos(): object
-    {
-        return $this->with('member')->where('country', 'JP')->orderBy('scheduled_start_time', 'asc')->get();
-    }
-
-    /**
-     * 英語グループの配信動画を取得
-     *
-     * @return object Collection
-     */
-    public function getEnVideos(): object
-    {
-        return $this->with('member')->where('country', 'EN')->orderBy('scheduled_start_time', 'asc')->get();
-    }
-
-    /**
-     * インドネシアグループの配信動画を取得
-     *
-     * @return object Collection
-     */
-    public function getIdVideos(): object
-    {
-        return $this->with('member')->where('country', 'ID')->orderBy('scheduled_start_time', 'asc')->get();
-    }
-
-    /**
      * 日付を取得
      *
      * @return string
