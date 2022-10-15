@@ -8,7 +8,7 @@ use App\Services\Youtube\SearchListService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class YoutubeController extends Controller
+class StreamsController extends Controller
 {
     protected $member;
     protected $searchListService;

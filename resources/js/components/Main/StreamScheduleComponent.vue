@@ -187,7 +187,7 @@ export default {
         },
 
         /**
-         * 最新の配信情報取得リクエスト
+         * 最新の配信情報を取得
          * @return {void}
          */
         fetchLatestVideos() {
