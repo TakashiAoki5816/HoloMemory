@@ -2,57 +2,30 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Services\MemberService;
 use App\Http\Controllers\Controller;
+use App\Repositories\MemberRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 
 class MembersController extends Controller
 {
     /**
-     * @param MemberService $memberService
+     * @param MemberRepository $memberRepository
      */
-    public function __construct(MemberService $memberService)
+    public function __construct(MemberRepository $memberRepository)
     {
-        $this->memberService = $memberService;
+        $this->memberRepository = $memberRepository;
     }
 
     /**
      * メンバー一覧表示
      *
+     * @param Request $request
      * @return Collection
      */
-    public function index(): Collection
+    public function index(Request $request): Collection
     {
-        return $this->memberService->fetchAll();
-    }
-
-    /**
-     * JPメンバー取得
-     *
-     * @return Collection
-     */
-    public function fetchJp(): Collection
-    {
-        return $this->memberService->fetchJp();
-    }
-
-    /**
-     * ENメンバー取得
-     *
-     * @return Collection
-     */
-    public function fetchEn(): Collection
-    {
-        return $this->memberService->fetchEN();
-    }
-
-    /**
-     * IDメンバー取得
-     *
-     * @return Collection
-     */
-    public function fetchId(): Collection
-    {
-        return $this->memberService->fetchId();
+        $selectedGroup = $request->query('group');
+        return $this->memberRepository->fetchAllBySelectedGroup($selectedGroup);
     }
 }

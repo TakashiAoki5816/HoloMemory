@@ -99,7 +99,7 @@ export default {
             selectedGroup: "ALL",
             countryBox: "country-box",
             countryBoxMt0: "country-box-mt-0",
-            all_url: "/api/member/index",
+            member_url: "/api/member?group=",
             jp_url: "/api/member/jp",
             en_url: "/api/member/en",
             id_url: "/api/member/id",
@@ -108,7 +108,7 @@ export default {
     },
     mounted() {
         this.fetchAllGroups();
-        this.fetchMembers(this.all_url);
+        this.fetchMembers(this.selectedGroup);
     },
     methods: {
         /**
@@ -125,9 +125,10 @@ export default {
          * @param {string} url
          * @return {void}
          */
-        fetchMembers(url) {
+        fetchMembers(selectedGroup) {
+            console.log(selectedGroup);
             axios
-                .get(url)
+                .get(this.member_url + selectedGroup)
                 .then((res) => {
                     this.members = res.data;
                 })
@@ -138,22 +139,7 @@ export default {
          */
         fetchMembersAfterChangeGroup(selectedGroup) {
             this.selectedGroup = selectedGroup.target.value;
-            switch (selectedGroup.target.value) {
-                case "ALL":
-                    this.fetchMembers(this.all_url);
-                    break;
-                case "JP":
-                    this.fetchMembers(this.jp_url);
-                    break;
-                case "EN":
-                    this.fetchMembers(this.en_url);
-                    break;
-                case "ID":
-                    this.fetchMembers(this.id_url);
-                    break;
-                default:
-                    "存在しないグループです。";
-            }
+            this.fetchMembers(this.selectedGroup);
         },
         /**
          * 期生名を取得

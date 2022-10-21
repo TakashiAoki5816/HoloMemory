@@ -16,42 +16,16 @@ class MemberRepository
     }
 
     /**
-     * メンバー一覧取得
-     *
+     * 選択されたグループのメンバー一覧を取得
+     * @param string $selectedGroup
      * @return Collection
      */
-    public function fetchAll(): Collection
+    public function fetchAllBySelectedGroup(string $selectedGroup): Collection
     {
-        return $this->member->all();
-    }
+        if ($selectedGroup === 'ALL') {
+            return $this->member->all();
+        }
 
-    /**
-     * JPメンバー取得
-     *
-     * @return Collection
-     */
-    public function fetchJp(): Collection
-    {
-        return $this->member->where('country', 'JP')->get();
-    }
-
-    /**
-     * ENメンバー取得
-     *
-     * @return Collection
-     */
-    public function fetchEn(): Collection
-    {
-        return $this->member->where('country', 'EN')->get();
-    }
-
-    /**
-     * IDメンバー取得
-     *
-     * @return Collection
-     */
-    public function fetchId(): Collection
-    {
-        return $this->member->where('country', 'ID')->get();
+        return $this->member->where('country', $selectedGroup)->get();
     }
 }
