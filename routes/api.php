@@ -10,9 +10,9 @@ Route::middleware(['middleware' => 'api'])->group(function () {
     // 配信情報
     //**********************************
     Route::group(['prefix' => 'videos', 'as' => 'videos.'], function () {
-        Route::get('', 'Api\StreamsController@index')->name('index');
+        Route::get('/', 'Api\StreamsController@index')->name('index');
         Route::get('/date/index', 'Api\StreamsController@date_index')->name('date_index');
-        Route::get('/create', 'Api\StreamsController@store')->name('create');
+        Route::get('/store', 'Api\StreamsController@store')->name('store');
     });
 
     //**********************************

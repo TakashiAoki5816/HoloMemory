@@ -162,6 +162,7 @@ export default {
         /**
          * URLに応じた配信情報を取得
          * @param {string} url
+         * @param {string} selectedGroup
          * @return {void}
          */
         fetchVideosByUrl(url, selectedGroup) {
@@ -188,7 +189,7 @@ export default {
         fetchLatestVideos() {
             if (confirm("最新の配信情報を取得しますか？")) {
                 axios
-                    .get("/api/videos/create")
+                    .get("/api/videos/store")
                     .then(() => {
                         this.fetchScheduleDate(this.selectedGroup);
                         this.fetchVideosByUrl(this.all_url, this.selectedGroup);
