@@ -43,19 +43,19 @@
     .date-text {
         @apply text-white text-center leading-[60px];
     }
-    .lessons {
+    .streams {
         @apply flex flex-wrap items-center justify-start;
     }
-    .lesson {
+    .stream {
         @apply w-[330px] mt-7 mr-10 border-2 border-gray-200 hover:scale-105;
     }
-    .lesson-header {
+    .stream-header {
         @apply h-[40px] flex items-center justify-between;
     }
-    .lesson-image {
+    .stream-image {
         @apply h-[180px];
     }
-    .lesson-channel-icon {
+    .stream-channel-icon {
         @apply w-[60px] block m-auto;
     }
     .country-box {

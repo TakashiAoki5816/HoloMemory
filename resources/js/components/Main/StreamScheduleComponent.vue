@@ -48,13 +48,13 @@
                         </div>
                         <!-- 配信一覧 -->
 
-                        <ul class="lessons">
+                        <ul class="streams">
                             <li
                                 v-for="stream in streams[scheduleDate]"
                                 :key="stream.video_id"
                             >
-                                <div class="lesson">
-                                    <div class="lesson-header">
+                                <div class="stream">
+                                    <div class="stream-header">
                                         <div>
                                             {{ stream.start_time }}
                                         </div>
@@ -62,7 +62,7 @@
                                             {{ stream.member.name }}
                                         </div>
                                     </div>
-                                    <div class="lesson-image">
+                                    <div class="stream-image">
                                         <a
                                             v-bind:href="
                                                 'https://www.youtube.com/watch?v=' +
@@ -81,7 +81,7 @@
                                     </div>
                                     <div>
                                         <a
-                                            class="lesson-channel-icon"
+                                            class="stream-channel-icon"
                                             v-bind:href="
                                                 'https://www.youtube.com/channel/' +
                                                 stream.member.channel_id
@@ -122,7 +122,6 @@ export default {
         return {
             groups: [],
             streams: {},
-            lessons: [],
             scheduleDates: [],
             selectedGroup: "ALL",
             all_url: "api/videos",
@@ -147,7 +146,6 @@ export default {
                 this.groups = res.data;
             });
         },
-
         /**
          * 対象のグループの配信日付を取得する
          * @param {string}
@@ -161,7 +159,6 @@ export default {
                     console.log(this.scheduleDates);
                 });
         },
-
         /**
          * URLに応じた配信情報を取得
          * @param {string} url
@@ -173,10 +170,9 @@ export default {
                 console.log(this.streams);
             });
         },
-
         /**
          * 選択されたグループの配信情報を取得
-         * @param {int} selectedGroup
+         * @param {object} selectedGroup
          * @return {void}
          */
         fetchVideosBySelectedGroup(selectedGroup) {
@@ -185,7 +181,6 @@ export default {
             this.fetchScheduleDate(this.selectedGroup);
             this.fetchVideosByUrl(this.all_url, this.selectedGroup);
         },
-
         /**
          * 最新の配信情報を取得
          * @return {void}
