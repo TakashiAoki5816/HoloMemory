@@ -17,8 +17,9 @@ RUN apk update && \
     unzip \
     vim \
     autoconf gcc g++ make && \
-    docker-php-ext-install pdo_mysql bcmath && \
-    pecl install xdebug && \
+    docker-php-ext-install pdo_mysql bcmath
+
+RUN pecl install xdebug && \
     docker-php-ext-enable xdebug
 
 WORKDIR /var/www/html

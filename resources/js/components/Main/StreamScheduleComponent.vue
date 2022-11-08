@@ -124,7 +124,7 @@ export default {
             streams: {},
             scheduleDates: [],
             selectedGroup: "ALL",
-            all_url: "api/videos",
+            fetch_video_url: "api/videos",
             empty_message: "直近の配信予定はございません。",
             undefind_group_message: "存在しないグループです。",
             message: "",
@@ -134,7 +134,7 @@ export default {
     mounted() {
         this.fetchAllGroups();
         this.fetchScheduleDate(this.selectedGroup);
-        this.fetchVideosByUrl(this.all_url, this.selectedGroup);
+        this.fetchVideosByUrl(this.fetch_video_url, this.selectedGroup);
     },
     methods: {
         /**
@@ -180,7 +180,7 @@ export default {
             // 最新の配信情報を取得した際にどのグループを選択しているのかが判るように格納
             this.selectedGroup = selectedGroup.target.value;
             this.fetchScheduleDate(this.selectedGroup);
-            this.fetchVideosByUrl(this.all_url, this.selectedGroup);
+            this.fetchVideosByUrl(this.fetch_video_url, this.selectedGroup);
         },
         /**
          * 最新の配信情報を取得
