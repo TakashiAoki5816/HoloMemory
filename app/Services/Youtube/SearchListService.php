@@ -9,6 +9,7 @@ use App\Services\Youtube\VideosListService;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class SearchListService
@@ -17,13 +18,16 @@ class SearchListService
     protected $videosListService;
 
     /**
-     * @param Member $member
+     * @param Member $memberModel
      * @param GuzzleRepositoryInterface $clientInterface
      * @param VideosListService $videosListService
      */
-    public function __construct(Member $member, GuzzleRepositoryInterface $clientInterface, VideosListService $videosListService)
-    {
-        $this->member = $member;
+    public function __construct(
+        Member $memberModel,
+        GuzzleRepositoryInterface $clientInterface,
+        VideosListService $videosListService
+    ) {
+        $this->memberModel = $memberModel;
         $this->clientInterface = $clientInterface;
         $this->videosListService = $videosListService;
     }
@@ -35,7 +39,7 @@ class SearchListService
      */
     public function requestSearchList(): array
     {
-        $members = $this->member->getAllMembers();
+        $members = $this->memberModel->fetchAllMembers();
         $videos = $this->requestToYoutubeDataApi($members);
         $params = $this->storeParamsFromVideos($videos);
 
@@ -45,10 +49,10 @@ class SearchListService
     /**
      * $videosに配信予定一覧を格納
      *
-     * @param Member $members
+     * @param Collection $members
      * @return array $videos
      */
-    public function requestToYoutubeDataApi(object $members): array
+    public function requestToYoutubeDataApi(Collection $members): array
     {
         $videos = array();
 
@@ -226,11 +230,7 @@ class SearchListService
      */
     public function insertDailyUpcomingVideos(array $params): void
     {
-        DB::beginTransaction();
-
         DB::table('daily_upcoming_videos')->truncate();
         DB::table('daily_upcoming_videos')->insert($params);
-
-        DB::commit();
     }
 }

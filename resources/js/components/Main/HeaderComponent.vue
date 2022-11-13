@@ -1,10 +1,10 @@
 <template>
     <header class="header">
         <Slide>
-            <a id="home" :href="this.home_url">
+            <a :href="this.homeUrl">
                 <span>{{ this.home }}</span>
             </a>
-            <a id="member" :href="this.member_url">
+            <a :href="this.memberUrl">
                 <span>{{ this.member }}</span>
             </a>
         </Slide>
@@ -22,9 +22,9 @@ import { Slide } from "vue3-burger-menu";
 export default {
     data: function () {
         return {
-            home_url: "/",
+            homeUrl: "/",
             home: "Home",
-            member_url: "/member/index",
+            memberUrl: "/member/index",
             member: "Member",
         };
     },

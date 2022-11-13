@@ -2,14 +2,22 @@
 
 use Illuminate\Http\Request;
 
-Route::get('/', 'MainController@main')->name('root');
+Route::middleware(['middleware' => 'web'])->group(function () {
+    Route::get('/', 'MainController@main')->name('root');
 
-Auth::routes();
-Route::get('/user', function (Request $request) {
-    $user = $request->user();
-    return response()->json($user);
-});
+    //**********************************
+    // ログイン処理
+    //**********************************
+    Auth::routes();
+    Route::get('/user', function (Request $request) {
+        $user = $request->user();
+        return response()->json($user);
+    });
 
-Route::group(['prefix' => 'member', 'as' => 'member.'], function () {
-    Route::get('/index', 'MembersController@index')->name('index');
+    //**********************************
+    // メンバー
+    //**********************************
+    Route::group(['prefix' => 'member', 'as' => 'member.'], function () {
+        Route::get('/index', 'MembersController@index')->name('index');
+    });
 });
