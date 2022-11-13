@@ -21,15 +21,15 @@ class GuzzleRepository implements GuzzleRepositoryInterface
      * 1つ目のAPIキーによるリクエスト
      *
      * @param string $url
-     * @return Response
+     * @return GuzzleHttp\Psr7\Response
      */
-    public function firstRequest(string $url)
+    public function firstRequest(string $url): Response
     {
         try {
             return $this->client->request(GuzzleRepositoryConsts::GET_METHOD, $url);
         } catch (Exception $e) {
             if (!config('app.SUB_API_KEY')) {
-                Log::debug("エラー内容:" . $e->getMessage() . PHP_EOL . "ファイル名:" . $e->getFile() . PHP_EOL . "エラー行:" . $e->getLine());
+                Log::error("エラー内容:" . $e->getMessage() . PHP_EOL . "ファイル名:" . $e->getFile() . PHP_EOL . "エラー行:" . $e->getLine());
                 throw new RedirectExceptions(route('root'), "1日のクォータ使用量を超えているため、リクエストを完了できません。", $e->getCode());
             }
 
@@ -41,10 +41,10 @@ class GuzzleRepository implements GuzzleRepositoryInterface
      * 2つ目のAPIキーによるリクエスト
      *
      * @param string $url
-     * @return Response
+     * @return GuzzleHttp\Psr7\Response
      * @throws RedirectExceptions
      */
-    public function secondRequest(string $url)
+    public function secondRequest(string $url): Response
     {
         try {
             return $this->client->request(GuzzleRepositoryConsts::GET_METHOD, $url);

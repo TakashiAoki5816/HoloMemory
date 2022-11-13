@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Repositories\DailyUpcomingVideoRepository;
 use App\Services\Youtube\SearchListService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -50,9 +51,9 @@ class StreamsController extends Controller
     /**
      * 最新の配信予定動画一覧をdaily_upcoming_videosに格納
      *
-     * @return void
+     * @return JsonResponse
      */
-    public function store()
+    public function store(): JsonResponse
     {
         $params = $this->searchListService->requestSearchList();
         $this->searchListService->insertDailyUpcomingVideos($params);
