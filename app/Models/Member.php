@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\DailyUpcomingVideos;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
@@ -17,9 +18,9 @@ class Member extends Model
     /**
      * 所属している全メンバーを取得
      *
-     * @return Member
+     * @return Collection
      */
-    public function getAllMembers(): object
+    public function fetchAllMembers(): Collection
     {
         return $this->all();
     }

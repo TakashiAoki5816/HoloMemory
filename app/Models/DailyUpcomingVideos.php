@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\Member;
 use App\Consts\DailyUpcomingVideosConsts;
+use App\Models\Member;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class DailyUpcomingVideos extends Model
 {
@@ -25,43 +26,21 @@ class DailyUpcomingVideos extends Model
     }
 
     /**
-     * 登録されている配信予定動画を全て取得
+     * グループIDに応じたCollectionを取得
      *
-     * @return object Collection
+     * @param string $group
+     * @return Collection
      */
-    public function getVideos(): object
+    public function getCollectionByGroupId($group): Collection
     {
-        return $this->with('member')->orderBy('scheduled_start_time', 'asc')->get();
-    }
+        if ($group === 'ALL') {
+            $collection = $this->with('member')->orderBy('scheduled_start_time', 'asc')->get();
+            return $collection;
+        }
 
-    /**
-     * 日本グループの配信動画を取得
-     *
-     * @return object Collection
-     */
-    public function getJpVideos(): object
-    {
-        return $this->with('member')->where('country', 'JP')->orderBy('scheduled_start_time', 'asc')->get();
-    }
+        $collection = $this->with('member')->where('country', $group)->orderBy('scheduled_start_time', 'asc')->get();
 
-    /**
-     * 英語グループの配信動画を取得
-     *
-     * @return object Collection
-     */
-    public function getEnVideos(): object
-    {
-        return $this->with('member')->where('country', 'EN')->orderBy('scheduled_start_time', 'asc')->get();
-    }
-
-    /**
-     * インドネシアグループの配信動画を取得
-     *
-     * @return object Collection
-     */
-    public function getIdVideos(): object
-    {
-        return $this->with('member')->where('country', 'ID')->orderBy('scheduled_start_time', 'asc')->get();
+        return $collection;
     }
 
     /**
